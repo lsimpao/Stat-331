@@ -1,9 +1,14 @@
 ---
 title: "Lab 6 Simulation"
 author: "Luisa Simpao"
-date: "February 26, 2019"
+date: "March 3, 2019"
 output: html_document
 ---
+
+```{r setup, include = FALSE, echo = FALSE}
+knitr::opts_chunk$set(fig.width = 8, 
+                      fig.length = 4)
+```
 
 ```{r load package}
 library(tidyverse)
@@ -12,7 +17,7 @@ library(tidyverse)
 # Normal Approximation to the Binomial
 
 1. Generate 1000 Samples from a binomial distribution with 20 trials & a 90% probability of success.
-```{r binomial w 20 trials & 90% success}
+```{r binom_20t_90s}
 my_samples <- data.frame(
   binom1 = rbinom(1000, size = 20, prob = 0.90)
 )
@@ -25,7 +30,7 @@ ggplot(my_samples, aes(x = binom1)) + geom_density()
 ```
 
 2. Generate 1000 samples each from a binomial distribution with (a) 90%, (b) 70%, and (c) 50% chance of success.
-```{r 1000 samples from binomial w diff success %}
+```{r binom_30t_mults}
 success = c(0.90, 0.70, 0.50)
 
 my_samples2 <- map_dfc(success, ~rbinom(1000, size = 20, prob = .x))
@@ -41,7 +46,7 @@ ggplot(my_samples2, aes(x = Samples, fill = Success)) +
 ```
 
 3. Generate 1000 samples each from a binomial distribution with (a) 20, (b) 50, (c) 100 trials & a 90% chance of success
-```{r 1000 samples from binomial w diff # of trials at 90% success}
+```{r binom_multt_90s}
 trials = c(20, 50, 100)
 
 my_samples3 <- map_dfc(trials, ~rbinom(1000, size = .x, prob = 0.90))
@@ -56,8 +61,10 @@ my_samples3 <- my_samples3 %>%
 
 ggplot(my_samples3, aes(x = Samples, fill = Trials)) + 
   geom_density(alpha = 0.5)
+```
 
-# This is where I make the function! 
+4. Make a function that takes trials (vector) and prob_success and plots densities of sample proportions for every value of trials supplied.
+```{r function}
 
 plot_prop <- function(trials, prob_success){
   
@@ -79,12 +86,13 @@ plot_prop(c(20,30,40,50), 0.9)
 plot_prop(c(60,70,80,90), 0.9)
 ```
 
-4. There must be approximately more than 50 trials for normal approximation to be suitable for binomial data. normality becomes more apparent as the number of trials increases.
+5. There must be approximately more than 50 trials for normal approximation to be suitable for binomial data. Normality becomes more apparent as the number of trials increases.
 
 # The Central Limit Theorem
 
 1. (see below)
-```{r normal distribution - mean 50, sdev 10}
+
+```{r norm_50m_10sd}
 
 # a 1000 samples of size 30
 my_samples4 <- replicate(1000, rnorm(30, mean = 50, sd = 10), simplify = FALSE)
@@ -123,7 +131,8 @@ ggarrange(m, s, r, q,
 ```
 
 2. (see below)
-```{r uniform distribution, min = 10, max = 90}
+
+```{r unif_10to90}
 # a 
 my_samples5 <- replicate(1000, runif(30, min = 10, max = 90), simplify = FALSE)
 
@@ -147,3 +156,5 @@ q <- ggplot(my_stats2, aes(x = quarts)) + geom_histogram(bins = 20)
 ggarrange(m, s, r, q, 
           ncol = 2, nrow = 2)
 ```
+
+3. Based on the graphs generated, the Central Limit seems to apply to other statistics, including median, standard deviation, range, and the 3rd quartile, for both Normal and Uniform Distributions. For the Normal distribution, ranges are slighly skewed right, but appears mostly normal. However, for the Uniform distribution, ranges are highly skewed left and the 3rd quartiles is slightly skewed left.
