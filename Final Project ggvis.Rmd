@@ -1,0 +1,39 @@
+---
+title: 'Final Project: ggvis'
+author: "Luisa Simpao & Kelly Ye"
+date: "March 6, 2019"
+output: 
+  html_document:
+    toc: true
+    toc_float: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introduction to ggvis
+
+The ggvis package allows for data visualization. It allows users to
+* Describe data graphics using a similar syntax as the ggplot2 package.
+* Produce interactive graphics that can modified locally in RStudio or on a browser.
+* Work well with the shiny platform to publish interactive graphics to use on any browser.
+
+This document allows you to understand the basics of ggvis' tools and how to apply them to data. Because data is often so large, it may be hard to understand and visualization allows us to see patterns and draw conclusions.
+
+## Data: adminpred
+
+To explore the visualization capabilities of ggvis, we'll use adminpred. This data comes from Mohan S Acharya. It contains contains Serial, GRE Scores, TOEFL Scores, University Ratings, Strength of the Statement of Purpose, Strength of the Letter of Recommendation, Undergraduate GPA, Research Experience, and Chance of Admission.
+
+```{r data_setup, echo = FALSE}
+library(readr)
+adminpred <- read_csv("Admission_Predict.csv")
+names(adminpred) <- c("serial","gre","toefl","univ_rate","state_purp","letter_rec","ug_gpa", "research_exp","admin_chance")
+adminpred$research_exp <- as.factor(adminpred$research_exp)
+```
+```{r load_pkg_data}
+library(tidyverse)
+library(ggvis)
+
+adminpred
+```
