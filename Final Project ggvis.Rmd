@@ -9,31 +9,198 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, 
+                      fig.width = 6, 
+                      fig.height = 4)
 ```
 
 # Introduction to ggvis
 
 The ggvis package allows for data visualization. It allows users to
+
 * Describe data graphics using a similar syntax as the ggplot2 package.
 * Produce interactive graphics that can modified locally in RStudio or on a browser.
-* Work well with the shiny platform to publish interactive graphics to use on any browser.
+* Work well with the Shiny platform to publish interactive graphics to use on any browser.
 
 This document allows you to understand the basics of ggvis' tools and how to apply them to data. Because data is often so large, it may be hard to understand and visualization allows us to see patterns and draw conclusions.
 
-## Data: adminpred
+### Data: adminpred
 
 To explore the visualization capabilities of ggvis, we'll use adminpred. This data comes from Mohan S Acharya. It contains contains Serial, GRE Scores, TOEFL Scores, University Ratings, Strength of the Statement of Purpose, Strength of the Letter of Recommendation, Undergraduate GPA, Research Experience, and Chance of Admission.
 
-```{r data_setup, echo = FALSE}
+```{r data_setup, include = FALSE}
 library(readr)
 adminpred <- read_csv("Admission_Predict.csv")
-names(adminpred) <- c("serial","gre","toefl","univ_rate","state_purp","letter_rec","ug_gpa", "research_exp","admin_chance")
+names(adminpred) <- c("serial","gre","toefl","univ_rate","state_purp","letter_rec","ug_gpa", "research_exp","admit_chance")
 adminpred$research_exp <- as.factor(adminpred$research_exp)
+adminpred$univ_rate <- as.factor(adminpred$univ_rate)
 ```
-```{r load_pkg_data}
+```{r load_pkg_data, message = FALSE, collapse = TRUE}
 library(tidyverse)
 library(ggvis)
+library(shiny)
 
 adminpred
 ```
+
+## Plotting basics
+
+Every ggvis graphic starts by calling ggvis(). The ggvis syntax provides many similarities to those of ggplot2. Where ggplot2 uses:
+
+> data %>% ggplot(aes(x, y, fill)) + geom_FUNCTION_NAME() + layers...
+
+ggvis uses ~variable to mean "by variable":
+
+> data %>% ggvis(~x, ~y) %>% layer_FUNCTION_NAME() %>% more layers...
+
+Notice that for both ggplot2 and ggvis, the data is piped into the function, where the variables are defined. However, they are different in that ggvis continues to pipe the main function to layers, whereas ggplot2 adds layers to the main function.
+
+### Plot options
+
+Let's start by plotting the GRE scores against TOEFL scores.
+
+```{r start}
+adminpred %>% ggvis(~gre, ~toefl)
+```
+
+ggvis is smart enough to guess what the variables are for! The code above was generated without defining any visual layer, whereas a ggplot() call would also require '+ geom_point()' for this same plot to be created.
+
+### Plots
+
+The ggvis package has many different plot options:
+
+* layer_points() for scatterplots; use an := to customize options
+    + size := (a numeric value)
+    + shape := (i.e. "diamond", "square")
+    + stroke := (a color value)
+    + fill := (a color value)
+* layer_smooths() for smoothed/regression lines
+* layer_model_predictions() for predicting models
+    + use model =  to call for a type of model; this needs to be defined for the model to run properly; notice that it is not :=
+* layer_boxplots() for box plots
+
+First, an example of a regression line added on a scatter plot:
+```{r reg_plots}
+adminpred %>% 
+  ggvis(~gre, ~toefl) %>% 
+  layer_points() %>% 
+  layer_smooths()
+```
+
+Also: We we use the option 'model' to create a linear model, using layer_model_predictions(). 
+
+The same grouping used in regular R code and ggplot2. We use the fill option to color points in layer_points() for whether or not applicants had research experience. 
+```{r lm_plot}
+adminpred %>%
+  ggvis(~gre, ~toefl) %>%
+  layer_points(fill = ~factor(research_exp)) %>% # note that it is only an "=" here, rather than ":=" 
+  layer_model_predictions(model = "lm")
+```
+
+The group_by() function is used to create linear models for the types of universities that applicants are applying for by piping the layer_model_predictions() to it.
+```{r grouped}
+adminpred %>%
+  ggvis(~gre, ~toefl, fill = ~factor(univ_rate)) %>%
+  layer_points() %>%
+  group_by(univ_rate) %>%
+  layer_model_predictions(model = "lm")
+```
+
+A categorical variable is used as the x variable to make the box plots for. For this plot, gre is used as the y-axis; the box plot shows the spread of applicant's GRE scores for each university type.
+
+```{r boxplot}
+adminpred %>% 
+  ggvis(~factor(univ_rate), ~gre) %>% 
+  layer_boxplots
+```
+
+### Graphs
+
+Graphs can also be created using ggvis! Graphs that can be made include:
+
+* layer_bars() for bar graphs
+    + use width = to specify the width of the bar
+* layer_histograms() for a histogram; note that this only needs an x variable
+    + use width = to specify the width of the bar; in this case, a greater width increases the range of x covered by the bar
+* layer_lines()
+  
+```{r bar_graph}
+adminpred %>% 
+  ggvis(~gre, ~toefl) %>%
+  layer_bars()
+```
+```{r histogram}
+adminpred %>% 
+  ggvis(~gre) %>%
+  layer_histograms(width = 5)
+```
+```{r line_graph}
+adminpred %>% 
+  ggvis(~gre, ~toefl) %>%
+  layer_lines()
+```
+
+### Simple additions to graphs
+
+Additional layers that may be added are:
+add_axis() can be added to add axis labels.
+
+> add_axis("x", title = "GRE Score")
+
+***
+
+## Interactivity
+
+Interactivity in ggvis allows users to customize the look of the graphs they make. ggvis interactivity is built on top of Shiny's reactive programming model, but it is possible to use ggvis without knowing how Shiny works to make simple interactions.
+
+This part describes the basics for a quick and easy way to add basic interactivity to a plot.
+
+A plot with basic interactive controls looks very similar to a static plot, but we replace constant options in functions to produce interactive controls.
+
+For exapmple, input_slider() inside the calls for layer_points() and layer_smooths() allows user to change size of the points or smoothness of the line:
+```{r}
+adminpred %>%
+  ggvis(x = ~gre, y = ~toefl) %>%
+  layer_smooths(span = input_slider(0, 1, value = 1)) %>%
+  layer_points(size := input_slider(1, 10, value = 10))
+```
+
+Interactive plots are built with shiny, so only one can run at a time in an R session. Once finished with a plot, press the stop button in Rstudio or close the browser window and then press Escape or Ctrl + C to stop.
+
+There are a lots of interactive controls we could use for the layers in ggvis, for examples:
+
+* input_slider() produces a slider
+* input_checkbox() produces a check-box
+* input_checkboxgroup() produces a group of check boxes
+* input_numeric() produces a spin box
+* input_radiobuttons() produces pick one from a set options
+* input_select() produces create a drop-down text box
+* input_text() produces arbitrary text input
+
+***
+
+## More layers
+
+ggvis also has more graphs that what's already been shown.
+
+Paths and polygons
+
+* layer_paths() 
+    + fill := (a color value); if this option is used, a polygon can be created
+* layer_ribbons() fills in the area above the curve (y); the fill can be controlled by defining y and y2
+* layer_rects() makes rectangles, defined by x1, y1, x2, and y2
+* layer_text() labels points with text when defined with x and y. 
+
+To find the top-scoring applicant in the GRE and TOEFL, layer_text() is used to display Serial No. with the scores. The data is filtered for those without research experience, only to narrow down the data displayed.
+```{r text}
+adminpred %>% 
+  filter(research_exp == 0) %>% 
+  ggvis(~gre, ~toefl, text := ~serial) %>%
+  layer_text()
+```
+
+***
+
+## Layers
+ggvis
+Using the adminpred dataset, we 
