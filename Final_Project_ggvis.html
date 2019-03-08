@@ -307,9 +307,9 @@ div.tocify {
 <li>Work well with the Shiny platform to publish interactive graphics to use on any browser.</li>
 </ul>
 <p>This document allows you to understand the basics of ggvis’ tools and how to apply them to data. Because data is often so large, it may be hard to understand and visualization allows us to see patterns and draw conclusions.</p>
-<div id="data-adminpred" class="section level3">
-<h3>Data: adminpred</h3>
-<p>To explore the visualization capabilities of ggvis, we’ll use adminpred. This data comes from Mohan S Acharya. It contains contains Serial, GRE Scores, TOEFL Scores, University Ratings, Strength of the Statement of Purpose, Strength of the Letter of Recommendation, Undergraduate GPA, Research Experience, and Chance of Admission.</p>
+<div id="data-adminpred" class="section level2">
+<h2>Data: adminpred</h2>
+<p>To explore the visualization capabilities of ggvis, we’ll use adminpred. This data comes from <a href="https://www.kaggle.com/mohansacharya/graduate-admissions" title="Graduate Admissions | Kaggle">Mohan S Acharya</a>. It contains contains Serial, GRE Scores, TOEFL Scores, University Ratings, Strength of the Statement of Purpose, Strength of the Letter of Recommendation, Undergraduate GPA, Research Experience, and Chance of Admission.</p>
 <pre class="r"><code>library(tidyverse)
 library(ggvis)
 library(shiny)
@@ -346,27 +346,27 @@ adminpred
 <p>Let’s start by plotting the GRE scores against TOEFL scores.</p>
 <pre class="r"><code>adminpred %&gt;% ggvis(~gre, ~toefl)</code></pre>
 <pre><code>## Guessing layer_points()</code></pre>
-<div id="plot_id281248832-container" class="ggvis-output-container">
-<div id="plot_id281248832" class="ggvis-output"></div>
+<div id="plot_id431321878-container" class="ggvis-output-container">
+<div id="plot_id431321878" class="ggvis-output"></div>
 <div class="plot-gear-icon">
 <nav class="ggvis-control">
 <a class="ggvis-dropdown-toggle" title="Controls" onclick="return false;"></a>
 <ul class="ggvis-dropdown">
 <li>
 Renderer: 
-<a id="plot_id281248832_renderer_svg" class="ggvis-renderer-button" onclick="return false;" data-plot-id="plot_id281248832" data-renderer="svg">SVG</a>
+<a id="plot_id431321878_renderer_svg" class="ggvis-renderer-button" onclick="return false;" data-plot-id="plot_id431321878" data-renderer="svg">SVG</a>
  | 
-<a id="plot_id281248832_renderer_canvas" class="ggvis-renderer-button" onclick="return false;" data-plot-id="plot_id281248832" data-renderer="canvas">Canvas</a>
+<a id="plot_id431321878_renderer_canvas" class="ggvis-renderer-button" onclick="return false;" data-plot-id="plot_id431321878" data-renderer="canvas">Canvas</a>
 </li>
 <li>
-<a id="plot_id281248832_download" class="ggvis-download" data-plot-id="plot_id281248832">Download</a>
+<a id="plot_id431321878_download" class="ggvis-download" data-plot-id="plot_id431321878">Download</a>
 </li>
 </ul>
 </nav>
 </div>
 </div>
 <script type="text/javascript">
-var plot_id281248832_spec = {
+var plot_id431321878_spec = {
   "data": [
     {
       "name": ".0",
@@ -482,12 +482,12 @@ var plot_id281248832_spec = {
     "duration": 250,
     "renderer": "svg",
     "hover_duration": 0,
-    "width": 576,
-    "height": 384
+    "width": 672,
+    "height": 480
   },
   "handlers": null
 };
-ggvis.getPlot("plot_id281248832").parseSpec(plot_id281248832_spec);
+ggvis.getPlot("plot_id431321878").parseSpec(plot_id431321878_spec);
 </script>
 <p>ggvis is smart enough to guess what the variables are for! The code above was generated without defining any visual layer, whereas a ggplot() call would also require ‘+ geom_point()’ for this same plot to be created.</p>
 </div>
@@ -514,27 +514,27 @@ ggvis.getPlot("plot_id281248832").parseSpec(plot_id281248832_spec);
   ggvis(~gre, ~toefl) %&gt;% 
   layer_points() %&gt;% 
   layer_smooths()</code></pre>
-<div id="plot_id202990238-container" class="ggvis-output-container">
-<div id="plot_id202990238" class="ggvis-output"></div>
+<div id="plot_id270149504-container" class="ggvis-output-container">
+<div id="plot_id270149504" class="ggvis-output"></div>
 <div class="plot-gear-icon">
 <nav class="ggvis-control">
 <a class="ggvis-dropdown-toggle" title="Controls" onclick="return false;"></a>
 <ul class="ggvis-dropdown">
 <li>
 Renderer: 
-<a id="plot_id202990238_renderer_svg" class="ggvis-renderer-button" onclick="return false;" data-plot-id="plot_id202990238" data-renderer="svg">SVG</a>
+<a id="plot_id270149504_renderer_svg" class="ggvis-renderer-button" onclick="return false;" data-plot-id="plot_id270149504" data-renderer="svg">SVG</a>
  | 
-<a id="plot_id202990238_renderer_canvas" class="ggvis-renderer-button" onclick="return false;" data-plot-id="plot_id202990238" data-renderer="canvas">Canvas</a>
+<a id="plot_id270149504_renderer_canvas" class="ggvis-renderer-button" onclick="return false;" data-plot-id="plot_id270149504" data-renderer="canvas">Canvas</a>
 </li>
 <li>
-<a id="plot_id202990238_download" class="ggvis-download" data-plot-id="plot_id202990238">Download</a>
+<a id="plot_id270149504_download" class="ggvis-download" data-plot-id="plot_id270149504">Download</a>
 </li>
 </ul>
 </nav>
 </div>
 </div>
 <script type="text/javascript">
-var plot_id202990238_spec = {
+var plot_id270149504_spec = {
   "data": [
     {
       "name": ".0",
@@ -693,12 +693,12 @@ var plot_id202990238_spec = {
     "duration": 250,
     "renderer": "svg",
     "hover_duration": 0,
-    "width": 576,
-    "height": 384
+    "width": 672,
+    "height": 480
   },
   "handlers": null
 };
-ggvis.getPlot("plot_id202990238").parseSpec(plot_id202990238_spec);
+ggvis.getPlot("plot_id270149504").parseSpec(plot_id270149504_spec);
 </script>
 <p>Also: We we use the option ‘model’ to create a linear model, using layer_model_predictions().</p>
 <p>The same grouping used in regular R code and ggplot2. We use the fill option to color points in layer_points() for whether or not applicants had research experience.</p>
@@ -707,27 +707,27 @@ ggvis.getPlot("plot_id202990238").parseSpec(plot_id202990238_spec);
   layer_points(fill = ~factor(research_exp)) %&gt;% # note that it is only an &quot;=&quot; here, rather than &quot;:=&quot; 
   layer_model_predictions(model = &quot;lm&quot;)</code></pre>
 <pre><code>## Guessing formula = toefl ~ gre</code></pre>
-<div id="plot_id919188272-container" class="ggvis-output-container">
-<div id="plot_id919188272" class="ggvis-output"></div>
+<div id="plot_id554766208-container" class="ggvis-output-container">
+<div id="plot_id554766208" class="ggvis-output"></div>
 <div class="plot-gear-icon">
 <nav class="ggvis-control">
 <a class="ggvis-dropdown-toggle" title="Controls" onclick="return false;"></a>
 <ul class="ggvis-dropdown">
 <li>
 Renderer: 
-<a id="plot_id919188272_renderer_svg" class="ggvis-renderer-button" onclick="return false;" data-plot-id="plot_id919188272" data-renderer="svg">SVG</a>
+<a id="plot_id554766208_renderer_svg" class="ggvis-renderer-button" onclick="return false;" data-plot-id="plot_id554766208" data-renderer="svg">SVG</a>
  | 
-<a id="plot_id919188272_renderer_canvas" class="ggvis-renderer-button" onclick="return false;" data-plot-id="plot_id919188272" data-renderer="canvas">Canvas</a>
+<a id="plot_id554766208_renderer_canvas" class="ggvis-renderer-button" onclick="return false;" data-plot-id="plot_id554766208" data-renderer="canvas">Canvas</a>
 </li>
 <li>
-<a id="plot_id919188272_download" class="ggvis-download" data-plot-id="plot_id919188272">Download</a>
+<a id="plot_id554766208_download" class="ggvis-download" data-plot-id="plot_id554766208">Download</a>
 </li>
 </ul>
 </nav>
 </div>
 </div>
 <script type="text/javascript">
-var plot_id919188272_spec = {
+var plot_id554766208_spec = {
   "data": [
     {
       "name": ".0",
@@ -912,12 +912,12 @@ var plot_id919188272_spec = {
     "duration": 250,
     "renderer": "svg",
     "hover_duration": 0,
-    "width": 576,
-    "height": 384
+    "width": 672,
+    "height": 480
   },
   "handlers": null
 };
-ggvis.getPlot("plot_id919188272").parseSpec(plot_id919188272_spec);
+ggvis.getPlot("plot_id554766208").parseSpec(plot_id554766208_spec);
 </script>
 <p>The group_by() function is used to create linear models for the types of universities that applicants are applying for by piping the layer_model_predictions() to it.</p>
 <pre class="r"><code>adminpred %&gt;%
@@ -926,27 +926,27 @@ ggvis.getPlot("plot_id919188272").parseSpec(plot_id919188272_spec);
   group_by(univ_rate) %&gt;%
   layer_model_predictions(model = &quot;lm&quot;)</code></pre>
 <pre><code>## Guessing formula = toefl ~ gre</code></pre>
-<div id="plot_id536276453-container" class="ggvis-output-container">
-<div id="plot_id536276453" class="ggvis-output"></div>
+<div id="plot_id788720171-container" class="ggvis-output-container">
+<div id="plot_id788720171" class="ggvis-output"></div>
 <div class="plot-gear-icon">
 <nav class="ggvis-control">
 <a class="ggvis-dropdown-toggle" title="Controls" onclick="return false;"></a>
 <ul class="ggvis-dropdown">
 <li>
 Renderer: 
-<a id="plot_id536276453_renderer_svg" class="ggvis-renderer-button" onclick="return false;" data-plot-id="plot_id536276453" data-renderer="svg">SVG</a>
+<a id="plot_id788720171_renderer_svg" class="ggvis-renderer-button" onclick="return false;" data-plot-id="plot_id788720171" data-renderer="svg">SVG</a>
  | 
-<a id="plot_id536276453_renderer_canvas" class="ggvis-renderer-button" onclick="return false;" data-plot-id="plot_id536276453" data-renderer="canvas">Canvas</a>
+<a id="plot_id788720171_renderer_canvas" class="ggvis-renderer-button" onclick="return false;" data-plot-id="plot_id788720171" data-renderer="canvas">Canvas</a>
 </li>
 <li>
-<a id="plot_id536276453_download" class="ggvis-download" data-plot-id="plot_id536276453">Download</a>
+<a id="plot_id788720171_download" class="ggvis-download" data-plot-id="plot_id788720171">Download</a>
 </li>
 </ul>
 </nav>
 </div>
 </div>
 <script type="text/javascript">
-var plot_id536276453_spec = {
+var plot_id788720171_spec = {
   "data": [
     {
       "name": ".0",
@@ -1148,62 +1148,38 @@ var plot_id536276453_spec = {
     "duration": 250,
     "renderer": "svg",
     "hover_duration": 0,
-    "width": 576,
-    "height": 384
+    "width": 672,
+    "height": 480
   },
   "handlers": null
 };
-ggvis.getPlot("plot_id536276453").parseSpec(plot_id536276453_spec);
+ggvis.getPlot("plot_id788720171").parseSpec(plot_id788720171_spec);
 </script>
 <p>A categorical variable is used as the x variable to make the box plots for. For this plot, gre is used as the y-axis; the box plot shows the spread of applicant’s GRE scores for each university type.</p>
 <pre class="r"><code>adminpred %&gt;% 
   ggvis(~factor(univ_rate), ~gre) %&gt;% 
-  layer_boxplots</code></pre>
-<pre><code>## Warning in bind_rows_(x, .id): Unequal factor levels: coercing to character</code></pre>
-<pre><code>## Warning in bind_rows_(x, .id): binding character and factor vector,
-## coercing into character vector
-
-## Warning in bind_rows_(x, .id): binding character and factor vector,
-## coercing into character vector
-
-## Warning in bind_rows_(x, .id): binding character and factor vector,
-## coercing into character vector
-
-## Warning in bind_rows_(x, .id): binding character and factor vector,
-## coercing into character vector
-
-## Warning in bind_rows_(x, .id): binding character and factor vector,
-## coercing into character vector</code></pre>
-<pre><code>## Warning in bind_rows_(x, .id): Unequal factor levels: coercing to character</code></pre>
-<pre><code>## Warning in bind_rows_(x, .id): binding character and factor vector,
-## coercing into character vector
-
-## Warning in bind_rows_(x, .id): binding character and factor vector,
-## coercing into character vector
-
-## Warning in bind_rows_(x, .id): binding character and factor vector,
-## coercing into character vector</code></pre>
-<div id="plot_id235746018-container" class="ggvis-output-container">
-<div id="plot_id235746018" class="ggvis-output"></div>
+  layer_boxplots()</code></pre>
+<div id="plot_id479548479-container" class="ggvis-output-container">
+<div id="plot_id479548479" class="ggvis-output"></div>
 <div class="plot-gear-icon">
 <nav class="ggvis-control">
 <a class="ggvis-dropdown-toggle" title="Controls" onclick="return false;"></a>
 <ul class="ggvis-dropdown">
 <li>
 Renderer: 
-<a id="plot_id235746018_renderer_svg" class="ggvis-renderer-button" onclick="return false;" data-plot-id="plot_id235746018" data-renderer="svg">SVG</a>
+<a id="plot_id479548479_renderer_svg" class="ggvis-renderer-button" onclick="return false;" data-plot-id="plot_id479548479" data-renderer="svg">SVG</a>
  | 
-<a id="plot_id235746018_renderer_canvas" class="ggvis-renderer-button" onclick="return false;" data-plot-id="plot_id235746018" data-renderer="canvas">Canvas</a>
+<a id="plot_id479548479_renderer_canvas" class="ggvis-renderer-button" onclick="return false;" data-plot-id="plot_id479548479" data-renderer="canvas">Canvas</a>
 </li>
 <li>
-<a id="plot_id235746018_download" class="ggvis-download" data-plot-id="plot_id235746018">Download</a>
+<a id="plot_id479548479_download" class="ggvis-download" data-plot-id="plot_id479548479">Download</a>
 </li>
 </ul>
 </nav>
 </div>
 </div>
 <script type="text/javascript">
-var plot_id235746018_spec = {
+var plot_id479548479_spec = {
   "data": [
     {
       "name": ".0/group_by1/boxplot2_flat",
@@ -1504,12 +1480,12 @@ var plot_id235746018_spec = {
     "duration": 250,
     "renderer": "svg",
     "hover_duration": 0,
-    "width": 576,
-    "height": 384
+    "width": 672,
+    "height": 480
   },
   "handlers": null
 };
-ggvis.getPlot("plot_id235746018").parseSpec(plot_id235746018_spec);
+ggvis.getPlot("plot_id479548479").parseSpec(plot_id479548479_spec);
 </script>
 </div>
 <div id="graphs" class="section level3">
@@ -1529,27 +1505,27 @@ ggvis.getPlot("plot_id235746018").parseSpec(plot_id235746018_spec);
 <pre class="r"><code>adminpred %&gt;% 
   ggvis(~gre, ~toefl) %&gt;%
   layer_bars()</code></pre>
-<div id="plot_id515905918-container" class="ggvis-output-container">
-<div id="plot_id515905918" class="ggvis-output"></div>
+<div id="plot_id355462867-container" class="ggvis-output-container">
+<div id="plot_id355462867" class="ggvis-output"></div>
 <div class="plot-gear-icon">
 <nav class="ggvis-control">
 <a class="ggvis-dropdown-toggle" title="Controls" onclick="return false;"></a>
 <ul class="ggvis-dropdown">
 <li>
 Renderer: 
-<a id="plot_id515905918_renderer_svg" class="ggvis-renderer-button" onclick="return false;" data-plot-id="plot_id515905918" data-renderer="svg">SVG</a>
+<a id="plot_id355462867_renderer_svg" class="ggvis-renderer-button" onclick="return false;" data-plot-id="plot_id355462867" data-renderer="svg">SVG</a>
  | 
-<a id="plot_id515905918_renderer_canvas" class="ggvis-renderer-button" onclick="return false;" data-plot-id="plot_id515905918" data-renderer="canvas">Canvas</a>
+<a id="plot_id355462867_renderer_canvas" class="ggvis-renderer-button" onclick="return false;" data-plot-id="plot_id355462867" data-renderer="canvas">Canvas</a>
 </li>
 <li>
-<a id="plot_id515905918_download" class="ggvis-download" data-plot-id="plot_id515905918">Download</a>
+<a id="plot_id355462867_download" class="ggvis-download" data-plot-id="plot_id355462867">Download</a>
 </li>
 </ul>
 </nav>
 </div>
 </div>
 <script type="text/javascript">
-var plot_id515905918_spec = {
+var plot_id355462867_spec = {
   "data": [
     {
       "name": ".0/count1/align2/stack3",
@@ -1675,37 +1651,37 @@ var plot_id515905918_spec = {
     "duration": 250,
     "renderer": "svg",
     "hover_duration": 0,
-    "width": 576,
-    "height": 384
+    "width": 672,
+    "height": 480
   },
   "handlers": null
 };
-ggvis.getPlot("plot_id515905918").parseSpec(plot_id515905918_spec);
+ggvis.getPlot("plot_id355462867").parseSpec(plot_id355462867_spec);
 </script>
 <pre class="r"><code>adminpred %&gt;% 
   ggvis(~gre) %&gt;%
   layer_histograms(width = 5)</code></pre>
-<div id="plot_id906231414-container" class="ggvis-output-container">
-<div id="plot_id906231414" class="ggvis-output"></div>
+<div id="plot_id674834662-container" class="ggvis-output-container">
+<div id="plot_id674834662" class="ggvis-output"></div>
 <div class="plot-gear-icon">
 <nav class="ggvis-control">
 <a class="ggvis-dropdown-toggle" title="Controls" onclick="return false;"></a>
 <ul class="ggvis-dropdown">
 <li>
 Renderer: 
-<a id="plot_id906231414_renderer_svg" class="ggvis-renderer-button" onclick="return false;" data-plot-id="plot_id906231414" data-renderer="svg">SVG</a>
+<a id="plot_id674834662_renderer_svg" class="ggvis-renderer-button" onclick="return false;" data-plot-id="plot_id674834662" data-renderer="svg">SVG</a>
  | 
-<a id="plot_id906231414_renderer_canvas" class="ggvis-renderer-button" onclick="return false;" data-plot-id="plot_id906231414" data-renderer="canvas">Canvas</a>
+<a id="plot_id674834662_renderer_canvas" class="ggvis-renderer-button" onclick="return false;" data-plot-id="plot_id674834662" data-renderer="canvas">Canvas</a>
 </li>
 <li>
-<a id="plot_id906231414_download" class="ggvis-download" data-plot-id="plot_id906231414">Download</a>
+<a id="plot_id674834662_download" class="ggvis-download" data-plot-id="plot_id674834662">Download</a>
 </li>
 </ul>
 </nav>
 </div>
 </div>
 <script type="text/javascript">
-var plot_id906231414_spec = {
+var plot_id674834662_spec = {
   "data": [
     {
       "name": ".0/bin1/stack2",
@@ -1831,37 +1807,37 @@ var plot_id906231414_spec = {
     "duration": 250,
     "renderer": "svg",
     "hover_duration": 0,
-    "width": 576,
-    "height": 384
+    "width": 672,
+    "height": 480
   },
   "handlers": null
 };
-ggvis.getPlot("plot_id906231414").parseSpec(plot_id906231414_spec);
+ggvis.getPlot("plot_id674834662").parseSpec(plot_id674834662_spec);
 </script>
 <pre class="r"><code>adminpred %&gt;% 
   ggvis(~gre, ~toefl) %&gt;%
   layer_lines()</code></pre>
-<div id="plot_id892504024-container" class="ggvis-output-container">
-<div id="plot_id892504024" class="ggvis-output"></div>
+<div id="plot_id852023734-container" class="ggvis-output-container">
+<div id="plot_id852023734" class="ggvis-output"></div>
 <div class="plot-gear-icon">
 <nav class="ggvis-control">
 <a class="ggvis-dropdown-toggle" title="Controls" onclick="return false;"></a>
 <ul class="ggvis-dropdown">
 <li>
 Renderer: 
-<a id="plot_id892504024_renderer_svg" class="ggvis-renderer-button" onclick="return false;" data-plot-id="plot_id892504024" data-renderer="svg">SVG</a>
+<a id="plot_id852023734_renderer_svg" class="ggvis-renderer-button" onclick="return false;" data-plot-id="plot_id852023734" data-renderer="svg">SVG</a>
  | 
-<a id="plot_id892504024_renderer_canvas" class="ggvis-renderer-button" onclick="return false;" data-plot-id="plot_id892504024" data-renderer="canvas">Canvas</a>
+<a id="plot_id852023734_renderer_canvas" class="ggvis-renderer-button" onclick="return false;" data-plot-id="plot_id852023734" data-renderer="canvas">Canvas</a>
 </li>
 <li>
-<a id="plot_id892504024_download" class="ggvis-download" data-plot-id="plot_id892504024">Download</a>
+<a id="plot_id852023734_download" class="ggvis-download" data-plot-id="plot_id852023734">Download</a>
 </li>
 </ul>
 </nav>
 </div>
 </div>
 <script type="text/javascript">
-var plot_id892504024_spec = {
+var plot_id852023734_spec = {
   "data": [
     {
       "name": ".0/arrange1",
@@ -1974,20 +1950,13 @@ var plot_id892504024_spec = {
     "duration": 250,
     "renderer": "svg",
     "hover_duration": 0,
-    "width": 576,
-    "height": 384
+    "width": 672,
+    "height": 480
   },
   "handlers": null
 };
-ggvis.getPlot("plot_id892504024").parseSpec(plot_id892504024_spec);
+ggvis.getPlot("plot_id852023734").parseSpec(plot_id852023734_spec);
 </script>
-</div>
-<div id="simple-additions-to-graphs" class="section level3">
-<h3>Simple additions to graphs</h3>
-<p>Additional layers that may be added are: add_axis() can be added to add axis labels.</p>
-<blockquote>
-<p>add_axis(“x”, title = “GRE Score”)</p>
-</blockquote>
 <hr />
 </div>
 </div>
@@ -2003,27 +1972,27 @@ ggvis.getPlot("plot_id892504024").parseSpec(plot_id892504024_spec);
   layer_points(size := input_slider(1, 10, value = 10))</code></pre>
 <pre><code>## Warning: Can't output dynamic/interactive ggvis plots in a knitr document.
 ## Generating a static (non-dynamic, non-interactive) version of the plot.</code></pre>
-<div id="plot_id562892778-container" class="ggvis-output-container">
-<div id="plot_id562892778" class="ggvis-output"></div>
+<div id="plot_id543715113-container" class="ggvis-output-container">
+<div id="plot_id543715113" class="ggvis-output"></div>
 <div class="plot-gear-icon">
 <nav class="ggvis-control">
 <a class="ggvis-dropdown-toggle" title="Controls" onclick="return false;"></a>
 <ul class="ggvis-dropdown">
 <li>
 Renderer: 
-<a id="plot_id562892778_renderer_svg" class="ggvis-renderer-button" onclick="return false;" data-plot-id="plot_id562892778" data-renderer="svg">SVG</a>
+<a id="plot_id543715113_renderer_svg" class="ggvis-renderer-button" onclick="return false;" data-plot-id="plot_id543715113" data-renderer="svg">SVG</a>
  | 
-<a id="plot_id562892778_renderer_canvas" class="ggvis-renderer-button" onclick="return false;" data-plot-id="plot_id562892778" data-renderer="canvas">Canvas</a>
+<a id="plot_id543715113_renderer_canvas" class="ggvis-renderer-button" onclick="return false;" data-plot-id="plot_id543715113" data-renderer="canvas">Canvas</a>
 </li>
 <li>
-<a id="plot_id562892778_download" class="ggvis-download" data-plot-id="plot_id562892778">Download</a>
+<a id="plot_id543715113_download" class="ggvis-download" data-plot-id="plot_id543715113">Download</a>
 </li>
 </ul>
 </nav>
 </div>
 </div>
 <script type="text/javascript">
-var plot_id562892778_spec = {
+var plot_id543715113_spec = {
   "data": [
     {
       "name": ".0",
@@ -2032,10 +2001,10 @@ var plot_id562892778_spec = {
         "parse": {
           "gre": "number",
           "toefl": "number",
-          "reactive_652230225": "number"
+          "reactive_132281953": "number"
         }
       },
-      "values": "\"gre\",\"toefl\",\"reactive_652230225\"\n337,118,10\n324,107,10\n316,104,10\n322,110,10\n314,103,10\n330,115,10\n321,109,10\n308,101,10\n302,102,10\n323,108,10\n325,106,10\n327,111,10\n328,112,10\n307,109,10\n311,104,10\n314,105,10\n317,107,10\n319,106,10\n318,110,10\n303,102,10\n312,107,10\n325,114,10\n328,116,10\n334,119,10\n336,119,10\n340,120,10\n322,109,10\n298,98,10\n295,93,10\n310,99,10\n300,97,10\n327,103,10\n338,118,10\n340,114,10\n331,112,10\n320,110,10\n299,106,10\n300,105,10\n304,105,10\n307,108,10\n308,110,10\n316,105,10\n313,107,10\n332,117,10\n326,113,10\n322,110,10\n329,114,10\n339,119,10\n321,110,10\n327,111,10\n313,98,10\n312,100,10\n334,116,10\n324,112,10\n322,110,10\n320,103,10\n316,102,10\n298,99,10\n300,99,10\n311,104,10\n309,100,10\n307,101,10\n304,105,10\n315,107,10\n325,111,10\n325,112,10\n327,114,10\n316,107,10\n318,109,10\n328,115,10\n332,118,10\n336,112,10\n321,111,10\n314,108,10\n314,106,10\n329,114,10\n327,112,10\n301,99,10\n296,95,10\n294,93,10\n312,105,10\n340,120,10\n320,110,10\n322,115,10\n340,115,10\n319,103,10\n315,106,10\n317,107,10\n314,108,10\n316,109,10\n318,106,10\n299,97,10\n298,98,10\n301,97,10\n303,99,10\n304,100,10\n306,100,10\n331,120,10\n332,119,10\n323,113,10\n322,107,10\n312,105,10\n314,106,10\n317,104,10\n326,112,10\n316,110,10\n329,111,10\n338,117,10\n331,116,10\n304,103,10\n305,108,10\n321,109,10\n301,107,10\n320,110,10\n311,105,10\n310,106,10\n299,102,10\n290,104,10\n296,99,10\n327,104,10\n335,117,10\n334,119,10\n310,106,10\n308,108,10\n301,106,10\n300,100,10\n323,113,10\n319,112,10\n326,112,10\n333,118,10\n339,114,10\n303,105,10\n309,105,10\n323,112,10\n333,113,10\n314,109,10\n312,103,10\n316,100,10\n326,116,10\n318,109,10\n329,110,10\n332,118,10\n331,115,10\n340,120,10\n325,112,10\n320,113,10\n315,105,10\n326,114,10\n339,116,10\n311,106,10\n334,114,10\n332,116,10\n321,112,10\n324,105,10\n326,108,10\n312,109,10\n315,105,10\n309,104,10\n306,106,10\n297,100,10\n315,103,10\n298,99,10\n318,109,10\n317,105,10\n329,111,10\n322,110,10\n302,102,10\n313,102,10\n293,97,10\n311,99,10\n312,101,10\n334,117,10\n322,110,10\n323,113,10\n321,111,10\n320,111,10\n329,119,10\n319,110,10\n309,108,10\n307,102,10\n300,104,10\n305,107,10\n299,100,10\n314,110,10\n316,106,10\n327,113,10\n317,107,10\n335,118,10\n331,115,10\n324,112,10\n324,111,10\n323,110,10\n322,114,10\n336,118,10\n316,109,10\n307,107,10\n306,105,10\n310,106,10\n311,104,10\n313,107,10\n317,103,10\n315,110,10\n340,120,10\n334,120,10\n298,105,10\n295,99,10\n315,99,10\n310,102,10\n305,106,10\n301,104,10\n325,108,10\n328,110,10\n338,120,10\n333,119,10\n331,117,10\n330,116,10\n322,112,10\n321,109,10\n324,110,10\n312,104,10\n313,103,10\n316,110,10\n324,113,10\n308,109,10\n305,105,10\n296,99,10\n306,110,10\n312,110,10\n318,112,10\n324,111,10\n313,104,10\n319,106,10\n312,107,10\n304,100,10\n330,113,10\n326,111,10\n325,112,10\n329,114,10\n310,104,10\n299,100,10\n296,101,10\n317,103,10\n324,115,10\n325,114,10\n314,107,10\n328,110,10\n316,105,10\n311,104,10\n324,110,10\n321,111,10\n320,104,10\n316,99,10\n318,100,10\n335,115,10\n321,114,10\n307,110,10\n309,99,10\n324,100,10\n326,102,10\n331,119,10\n327,108,10\n312,104,10\n308,103,10\n324,111,10\n325,110,10\n313,102,10\n312,105,10\n314,107,10\n327,113,10\n308,108,10\n306,105,10\n299,96,10\n294,95,10\n312,99,10\n315,100,10\n322,110,10\n329,113,10\n320,101,10\n308,103,10\n304,102,10\n311,102,10\n317,110,10\n312,106,10\n321,111,10\n340,112,10\n331,116,10\n336,118,10\n324,114,10\n314,104,10\n313,109,10\n307,105,10\n300,102,10\n302,99,10\n312,98,10\n316,101,10\n317,100,10\n310,107,10\n320,120,10\n330,114,10\n305,112,10\n309,106,10\n319,108,10\n322,105,10\n323,107,10\n313,106,10\n321,109,10\n323,110,10\n325,112,10\n312,108,10\n308,110,10\n320,104,10\n328,108,10\n311,107,10\n301,100,10\n305,105,10\n308,104,10\n298,101,10\n300,99,10\n324,111,10\n327,113,10\n317,106,10\n323,104,10\n314,107,10\n305,102,10\n315,104,10\n326,116,10\n299,100,10\n295,101,10\n324,112,10\n297,96,10\n327,113,10\n311,105,10\n308,106,10\n319,108,10\n312,107,10\n325,111,10\n319,110,10\n332,118,10\n323,108,10\n324,107,10\n312,107,10\n326,110,10\n308,106,10\n305,103,10\n295,96,10\n316,98,10\n304,97,10\n299,94,10\n302,99,10\n313,101,10\n318,107,10\n325,110,10\n303,100,10\n300,102,10\n297,98,10\n317,106,10\n327,109,10\n301,104,10\n314,105,10\n321,107,10\n322,110,10\n334,116,10\n338,115,10\n306,103,10\n313,102,10\n330,114,10\n320,104,10\n311,98,10\n298,92,10\n301,98,10\n310,103,10\n324,110,10\n336,119,10\n321,109,10\n315,105,10\n304,101,10\n297,96,10\n290,100,10\n303,98,10\n311,99,10\n322,104,10\n319,105,10\n324,110,10\n300,100,10\n340,113,10\n335,117,10\n302,101,10\n307,105,10\n296,97,10\n320,108,10\n314,102,10\n318,106,10\n326,112,10\n317,104,10\n329,111,10\n324,110,10\n325,107,10\n330,116,10\n312,103,10\n333,117,10"
+      "values": "\"gre\",\"toefl\",\"reactive_132281953\"\n337,118,10\n324,107,10\n316,104,10\n322,110,10\n314,103,10\n330,115,10\n321,109,10\n308,101,10\n302,102,10\n323,108,10\n325,106,10\n327,111,10\n328,112,10\n307,109,10\n311,104,10\n314,105,10\n317,107,10\n319,106,10\n318,110,10\n303,102,10\n312,107,10\n325,114,10\n328,116,10\n334,119,10\n336,119,10\n340,120,10\n322,109,10\n298,98,10\n295,93,10\n310,99,10\n300,97,10\n327,103,10\n338,118,10\n340,114,10\n331,112,10\n320,110,10\n299,106,10\n300,105,10\n304,105,10\n307,108,10\n308,110,10\n316,105,10\n313,107,10\n332,117,10\n326,113,10\n322,110,10\n329,114,10\n339,119,10\n321,110,10\n327,111,10\n313,98,10\n312,100,10\n334,116,10\n324,112,10\n322,110,10\n320,103,10\n316,102,10\n298,99,10\n300,99,10\n311,104,10\n309,100,10\n307,101,10\n304,105,10\n315,107,10\n325,111,10\n325,112,10\n327,114,10\n316,107,10\n318,109,10\n328,115,10\n332,118,10\n336,112,10\n321,111,10\n314,108,10\n314,106,10\n329,114,10\n327,112,10\n301,99,10\n296,95,10\n294,93,10\n312,105,10\n340,120,10\n320,110,10\n322,115,10\n340,115,10\n319,103,10\n315,106,10\n317,107,10\n314,108,10\n316,109,10\n318,106,10\n299,97,10\n298,98,10\n301,97,10\n303,99,10\n304,100,10\n306,100,10\n331,120,10\n332,119,10\n323,113,10\n322,107,10\n312,105,10\n314,106,10\n317,104,10\n326,112,10\n316,110,10\n329,111,10\n338,117,10\n331,116,10\n304,103,10\n305,108,10\n321,109,10\n301,107,10\n320,110,10\n311,105,10\n310,106,10\n299,102,10\n290,104,10\n296,99,10\n327,104,10\n335,117,10\n334,119,10\n310,106,10\n308,108,10\n301,106,10\n300,100,10\n323,113,10\n319,112,10\n326,112,10\n333,118,10\n339,114,10\n303,105,10\n309,105,10\n323,112,10\n333,113,10\n314,109,10\n312,103,10\n316,100,10\n326,116,10\n318,109,10\n329,110,10\n332,118,10\n331,115,10\n340,120,10\n325,112,10\n320,113,10\n315,105,10\n326,114,10\n339,116,10\n311,106,10\n334,114,10\n332,116,10\n321,112,10\n324,105,10\n326,108,10\n312,109,10\n315,105,10\n309,104,10\n306,106,10\n297,100,10\n315,103,10\n298,99,10\n318,109,10\n317,105,10\n329,111,10\n322,110,10\n302,102,10\n313,102,10\n293,97,10\n311,99,10\n312,101,10\n334,117,10\n322,110,10\n323,113,10\n321,111,10\n320,111,10\n329,119,10\n319,110,10\n309,108,10\n307,102,10\n300,104,10\n305,107,10\n299,100,10\n314,110,10\n316,106,10\n327,113,10\n317,107,10\n335,118,10\n331,115,10\n324,112,10\n324,111,10\n323,110,10\n322,114,10\n336,118,10\n316,109,10\n307,107,10\n306,105,10\n310,106,10\n311,104,10\n313,107,10\n317,103,10\n315,110,10\n340,120,10\n334,120,10\n298,105,10\n295,99,10\n315,99,10\n310,102,10\n305,106,10\n301,104,10\n325,108,10\n328,110,10\n338,120,10\n333,119,10\n331,117,10\n330,116,10\n322,112,10\n321,109,10\n324,110,10\n312,104,10\n313,103,10\n316,110,10\n324,113,10\n308,109,10\n305,105,10\n296,99,10\n306,110,10\n312,110,10\n318,112,10\n324,111,10\n313,104,10\n319,106,10\n312,107,10\n304,100,10\n330,113,10\n326,111,10\n325,112,10\n329,114,10\n310,104,10\n299,100,10\n296,101,10\n317,103,10\n324,115,10\n325,114,10\n314,107,10\n328,110,10\n316,105,10\n311,104,10\n324,110,10\n321,111,10\n320,104,10\n316,99,10\n318,100,10\n335,115,10\n321,114,10\n307,110,10\n309,99,10\n324,100,10\n326,102,10\n331,119,10\n327,108,10\n312,104,10\n308,103,10\n324,111,10\n325,110,10\n313,102,10\n312,105,10\n314,107,10\n327,113,10\n308,108,10\n306,105,10\n299,96,10\n294,95,10\n312,99,10\n315,100,10\n322,110,10\n329,113,10\n320,101,10\n308,103,10\n304,102,10\n311,102,10\n317,110,10\n312,106,10\n321,111,10\n340,112,10\n331,116,10\n336,118,10\n324,114,10\n314,104,10\n313,109,10\n307,105,10\n300,102,10\n302,99,10\n312,98,10\n316,101,10\n317,100,10\n310,107,10\n320,120,10\n330,114,10\n305,112,10\n309,106,10\n319,108,10\n322,105,10\n323,107,10\n313,106,10\n321,109,10\n323,110,10\n325,112,10\n312,108,10\n308,110,10\n320,104,10\n328,108,10\n311,107,10\n301,100,10\n305,105,10\n308,104,10\n298,101,10\n300,99,10\n324,111,10\n327,113,10\n317,106,10\n323,104,10\n314,107,10\n305,102,10\n315,104,10\n326,116,10\n299,100,10\n295,101,10\n324,112,10\n297,96,10\n327,113,10\n311,105,10\n308,106,10\n319,108,10\n312,107,10\n325,111,10\n319,110,10\n332,118,10\n323,108,10\n324,107,10\n312,107,10\n326,110,10\n308,106,10\n305,103,10\n295,96,10\n316,98,10\n304,97,10\n299,94,10\n302,99,10\n313,101,10\n318,107,10\n325,110,10\n303,100,10\n300,102,10\n297,98,10\n317,106,10\n327,109,10\n301,104,10\n314,105,10\n321,107,10\n322,110,10\n334,116,10\n338,115,10\n306,103,10\n313,102,10\n330,114,10\n320,104,10\n311,98,10\n298,92,10\n301,98,10\n310,103,10\n324,110,10\n336,119,10\n321,109,10\n315,105,10\n304,101,10\n297,96,10\n290,100,10\n303,98,10\n311,99,10\n322,104,10\n319,105,10\n324,110,10\n300,100,10\n340,113,10\n335,117,10\n302,101,10\n307,105,10\n296,97,10\n320,108,10\n314,102,10\n318,106,10\n326,112,10\n317,104,10\n329,111,10\n324,110,10\n325,107,10\n330,116,10\n312,103,10\n333,117,10"
     },
     {
       "name": ".0/model_prediction1",
@@ -2142,7 +2111,7 @@ var plot_id562892778_spec = {
             "field": "data.toefl"
           },
           "size": {
-            "field": "data.reactive_652230225"
+            "field": "data.reactive_132281953"
           }
         },
         "ggvis": {
@@ -2183,12 +2152,12 @@ var plot_id562892778_spec = {
     "duration": 250,
     "renderer": "svg",
     "hover_duration": 0,
-    "width": 576,
-    "height": 384
+    "width": 672,
+    "height": 480
   },
   "handlers": null
 };
-ggvis.getPlot("plot_id562892778").parseSpec(plot_id562892778_spec);
+ggvis.getPlot("plot_id543715113").parseSpec(plot_id543715113_spec);
 </script>
 <p>Interactive plots are built with shiny, so only one can run at a time in an R session. Once finished with a plot, press the stop button in Rstudio or close the browser window and then press Escape or Ctrl + C to stop.</p>
 <p>There are a lots of interactive controls we could use for the layers in ggvis, for examples:</p>
@@ -2204,8 +2173,8 @@ ggvis.getPlot("plot_id562892778").parseSpec(plot_id562892778_spec);
 <hr />
 </div>
 <div id="more-layers" class="section level2">
-<h2>More layers</h2>
-<p>ggvis also has more graphs that what’s already been shown.</p>
+<h2>More Layers</h2>
+<p>ggvis also has more graphs that what’s already been shown and what is outlined here. An example for layer_text() is shown below.</p>
 <p>Paths and polygons</p>
 <ul>
 <li>layer_paths()
@@ -2221,27 +2190,27 @@ ggvis.getPlot("plot_id562892778").parseSpec(plot_id562892778_spec);
   filter(research_exp == 0) %&gt;% 
   ggvis(~gre, ~toefl, text := ~serial) %&gt;%
   layer_text()</code></pre>
-<div id="plot_id828959781-container" class="ggvis-output-container">
-<div id="plot_id828959781" class="ggvis-output"></div>
+<div id="plot_id730061243-container" class="ggvis-output-container">
+<div id="plot_id730061243" class="ggvis-output"></div>
 <div class="plot-gear-icon">
 <nav class="ggvis-control">
 <a class="ggvis-dropdown-toggle" title="Controls" onclick="return false;"></a>
 <ul class="ggvis-dropdown">
 <li>
 Renderer: 
-<a id="plot_id828959781_renderer_svg" class="ggvis-renderer-button" onclick="return false;" data-plot-id="plot_id828959781" data-renderer="svg">SVG</a>
+<a id="plot_id730061243_renderer_svg" class="ggvis-renderer-button" onclick="return false;" data-plot-id="plot_id730061243" data-renderer="svg">SVG</a>
  | 
-<a id="plot_id828959781_renderer_canvas" class="ggvis-renderer-button" onclick="return false;" data-plot-id="plot_id828959781" data-renderer="canvas">Canvas</a>
+<a id="plot_id730061243_renderer_canvas" class="ggvis-renderer-button" onclick="return false;" data-plot-id="plot_id730061243" data-renderer="canvas">Canvas</a>
 </li>
 <li>
-<a id="plot_id828959781_download" class="ggvis-download" data-plot-id="plot_id828959781">Download</a>
+<a id="plot_id730061243_download" class="ggvis-download" data-plot-id="plot_id730061243">Download</a>
 </li>
 </ul>
 </nav>
 </div>
 </div>
 <script type="text/javascript">
-var plot_id828959781_spec = {
+var plot_id730061243_spec = {
   "data": [
     {
       "name": ".0",
@@ -2358,18 +2327,369 @@ var plot_id828959781_spec = {
     "duration": 250,
     "renderer": "svg",
     "hover_duration": 0,
-    "width": 576,
-    "height": 384
+    "width": 672,
+    "height": 480
   },
   "handlers": null
 };
-ggvis.getPlot("plot_id828959781").parseSpec(plot_id828959781_spec);
+ggvis.getPlot("plot_id730061243").parseSpec(plot_id730061243_spec);
 </script>
 <hr />
 </div>
-<div id="layers" class="section level2">
-<h2>Layers</h2>
-<p>ggvis Using the adminpred dataset, we</p>
+<div id="customize-appearance" class="section level2">
+<h2>Customize Appearance</h2>
+<p>Piping the visualizations made to more layers can allow users to add axes and legends, define scales, and customize the appearance of the graphs using properties.</p>
+<div id="axes-and-legends" class="section level3">
+<h3>Axes and legends</h3>
+<p>To modify the axis’ label, when piped into a ggvis function:</p>
+<blockquote>
+<p>add_axis(“x”, title = “the x variable”)</p>
+</blockquote>
+<p>Axes placement can be controlled, using the orient argument or the offset argument.</p>
+<blockquote>
+<p>add_axis(“x”, orient = “top/bottom/left/right”) add_axis(“x, offset = N)</p>
+</blockquote>
+<p>To add a legend, when piped into a ggvis function the first line of code may be used. The second one allows for multiple scales to be displayed in one legend. Note that legends are not defined by variables but by arguments in the layer that defines the graph being produced. Examples are shown here:</p>
+<blockquote>
+<p>add_legend(“fill”, title = “fill variable”) add_legend(“fill”, “size”)</p>
+</blockquote>
+<p>To combine legends, one would have to mmanually do so, by supplying the name of multiple scales to one legend. An example of this will be shown below.</p>
+</div>
+<div id="scales" class="section level3">
+<h3>Scales</h3>
+<p>In ggvis, scales control the mapping between the data values and values interpreted by the drawing device, just like ggplot2. However, comparing to ggplot2, ggvis has far fewer scales (3 vs 70), and with each function doing much more.</p>
+<p>There are three basic scales in ggvis, which are called the three basic vega scales:</p>
+<ul>
+<li>scale_numeric() for quantitative, numeric values</li>
+<li>scale_ordinal() for qualitative, categorical values</li>
+<li>scale_time() for date/time values</li>
+</ul>
+<p>By default, scales are added so that every scaled property gets a scale with the same name as the property (with a few exceptions y2 to y, x2 to x, fillOpacity and strokeOpacity to opacity and so on.).</p>
+</div>
+<div id="scale-arguments" class="section level3">
+<h3>Scale arguments</h3>
+<p>These are some arguments for the scales:</p>
+<ul>
+<li>name: the argument as a string identifier for the scale.</li>
+<li>domain: the input data values to the scale.</li>
+<li>range: the output visual values from the scale. Usually a vector of length two for quantiative scales, for ordinal scales, it’s a vector the same length as the domain.</li>
+<li>reverse: a boolean flag that will flip the order of the range.</li>
+</ul>
+<p>There are a lot we can play with for scales and properties. For example, we could do multiple scales for one property.</p>
+</div>
+<div id="properties-for-visual-customization" class="section level3">
+<h3>Properties for visual customization</h3>
+<p>Axes and legends share properties that are defined in a list of props(). Take note of the code below to see how axes and properties work together.</p>
+<pre class="r"><code>adminpred %&gt;% ggvis(y = ~admit_chance, 
+            shape = ~factor(univ_rate)) %&gt;%
+  layer_points(prop(&quot;x&quot;, ~gre, 
+            scale = &quot;x_gre&quot;), 
+            fill := &quot;pink&quot;, 
+            stroke = &quot;black&quot;) %&gt;%
+  layer_points(prop(&quot;x&quot;, ~toefl, 
+            scale = &quot;x_toefl&quot;), 
+            fill := &quot;lightseagreen&quot;, 
+            stroke = &quot;black&quot;) %&gt;%
+  add_axis(&quot;x&quot;, 
+           scale = &quot;x_gre&quot;, 
+           title = &quot;GRE Score&quot;, 
+           orient = &quot;bottom&quot;) %&gt;%
+  add_axis(&quot;x&quot;, 
+           scale = &quot;x_toefl&quot;, 
+           title = &quot;TOEFL Score&quot;, 
+           orient = &quot;top&quot;, 
+           properties = axis_props(
+             grid = list(stroke = &quot;powderblue&quot;),
+             ticks = list(stroke = &quot;powderblue&quot;),
+             labels = list(fill = &quot;lightseagreen&quot;))) %&gt;% 
+  add_axis(&quot;y&quot;, 
+           title = &quot;Chance of Admissions&quot;) %&gt;% 
+  add_legend(&quot;shape&quot;,
+           title = &quot;University Rating&quot;)</code></pre>
+<div id="plot_id539281166-container" class="ggvis-output-container">
+<div id="plot_id539281166" class="ggvis-output"></div>
+<div class="plot-gear-icon">
+<nav class="ggvis-control">
+<a class="ggvis-dropdown-toggle" title="Controls" onclick="return false;"></a>
+<ul class="ggvis-dropdown">
+<li>
+Renderer: 
+<a id="plot_id539281166_renderer_svg" class="ggvis-renderer-button" onclick="return false;" data-plot-id="plot_id539281166" data-renderer="svg">SVG</a>
+ | 
+<a id="plot_id539281166_renderer_canvas" class="ggvis-renderer-button" onclick="return false;" data-plot-id="plot_id539281166" data-renderer="canvas">Canvas</a>
+</li>
+<li>
+<a id="plot_id539281166_download" class="ggvis-download" data-plot-id="plot_id539281166">Download</a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+<script type="text/javascript">
+var plot_id539281166_spec = {
+  "data": [
+    {
+      "name": ".0",
+      "format": {
+        "type": "csv",
+        "parse": {
+          "admit_chance": "number",
+          "gre": "number",
+          "toefl": "number"
+        }
+      },
+      "values": "\"admit_chance\",\"factor(univ_rate)\",\"gre\",\"toefl\"\n0.92,\"4\",337,118\n0.76,\"4\",324,107\n0.72,\"3\",316,104\n0.8,\"3\",322,110\n0.65,\"2\",314,103\n0.9,\"5\",330,115\n0.75,\"3\",321,109\n0.68,\"2\",308,101\n0.5,\"1\",302,102\n0.45,\"3\",323,108\n0.52,\"3\",325,106\n0.84,\"4\",327,111\n0.78,\"4\",328,112\n0.62,\"3\",307,109\n0.61,\"3\",311,104\n0.54,\"3\",314,105\n0.66,\"3\",317,107\n0.65,\"3\",319,106\n0.63,\"3\",318,110\n0.62,\"3\",303,102\n0.64,\"3\",312,107\n0.7,\"4\",325,114\n0.94,\"5\",328,116\n0.95,\"5\",334,119\n0.97,\"5\",336,119\n0.94,\"5\",340,120\n0.76,\"5\",322,109\n0.44,\"2\",298,98\n0.46,\"1\",295,93\n0.54,\"2\",310,99\n0.65,\"2\",300,97\n0.74,\"3\",327,103\n0.91,\"4\",338,118\n0.9,\"5\",340,114\n0.94,\"5\",331,112\n0.88,\"5\",320,110\n0.64,\"2\",299,106\n0.58,\"1\",300,105\n0.52,\"1\",304,105\n0.48,\"2\",307,108\n0.46,\"3\",308,110\n0.49,\"2\",316,105\n0.53,\"2\",313,107\n0.87,\"4\",332,117\n0.91,\"5\",326,113\n0.88,\"5\",322,110\n0.86,\"5\",329,114\n0.89,\"5\",339,119\n0.82,\"3\",321,110\n0.78,\"4\",327,111\n0.76,\"3\",313,98\n0.56,\"2\",312,100\n0.78,\"4\",334,116\n0.72,\"4\",324,112\n0.7,\"3\",322,110\n0.64,\"3\",320,103\n0.64,\"3\",316,102\n0.46,\"2\",298,99\n0.36,\"1\",300,99\n0.42,\"2\",311,104\n0.48,\"2\",309,100\n0.47,\"3\",307,101\n0.54,\"2\",304,105\n0.56,\"2\",315,107\n0.52,\"3\",325,111\n0.55,\"4\",325,112\n0.61,\"3\",327,114\n0.57,\"2\",316,107\n0.68,\"3\",318,109\n0.78,\"4\",328,115\n0.94,\"5\",332,118\n0.96,\"5\",336,112\n0.93,\"5\",321,111\n0.84,\"4\",314,108\n0.74,\"3\",314,106\n0.72,\"2\",329,114\n0.74,\"3\",327,112\n0.64,\"2\",301,99\n0.44,\"2\",296,95\n0.46,\"1\",294,93\n0.5,\"3\",312,105\n0.96,\"4\",340,120\n0.92,\"5\",320,110\n0.92,\"5\",322,115\n0.94,\"5\",340,115\n0.76,\"4\",319,103\n0.72,\"3\",315,106\n0.66,\"2\",317,107\n0.64,\"3\",314,108\n0.74,\"4\",316,109\n0.64,\"2\",318,106\n0.38,\"3\",299,97\n0.34,\"2\",298,98\n0.44,\"2\",301,97\n0.36,\"3\",303,99\n0.42,\"4\",304,100\n0.48,\"2\",306,100\n0.86,\"3\",331,120\n0.9,\"4\",332,119\n0.79,\"3\",323,113\n0.71,\"3\",322,107\n0.64,\"2\",312,105\n0.62,\"2\",314,106\n0.57,\"2\",317,104\n0.74,\"3\",326,112\n0.69,\"3\",316,110\n0.87,\"4\",329,111\n0.91,\"4\",338,117\n0.93,\"5\",331,116\n0.68,\"5\",304,103\n0.61,\"5\",305,108\n0.69,\"4\",321,109\n0.62,\"3\",301,107\n0.72,\"2\",320,110\n0.59,\"3\",311,105\n0.66,\"4\",310,106\n0.56,\"3\",299,102\n0.45,\"4\",290,104\n0.47,\"2\",296,99\n0.71,\"5\",327,104\n0.94,\"5\",335,117\n0.94,\"5\",334,119\n0.57,\"4\",310,106\n0.61,\"3\",308,108\n0.57,\"4\",301,106\n0.64,\"3\",300,100\n0.85,\"3\",323,113\n0.78,\"3\",319,112\n0.84,\"3\",326,112\n0.92,\"5\",333,118\n0.96,\"5\",339,114\n0.77,\"5\",303,105\n0.71,\"5\",309,105\n0.79,\"5\",323,112\n0.89,\"5\",333,113\n0.82,\"4\",314,109\n0.76,\"3\",312,103\n0.71,\"2\",316,100\n0.8,\"2\",326,116\n0.78,\"1\",318,109\n0.84,\"2\",329,110\n0.9,\"2\",332,118\n0.92,\"5\",331,115\n0.97,\"4\",340,120\n0.8,\"2\",325,112\n0.81,\"2\",320,113\n0.75,\"3\",315,105\n0.83,\"3\",326,114\n0.96,\"4\",339,116\n0.79,\"2\",311,106\n0.93,\"4\",334,114\n0.94,\"5\",332,116\n0.86,\"5\",321,112\n0.79,\"3\",324,105\n0.8,\"3\",326,108\n0.77,\"3\",312,109\n0.7,\"3\",315,105\n0.65,\"2\",309,104\n0.61,\"2\",306,106\n0.52,\"1\",297,100\n0.57,\"1\",315,103\n0.53,\"1\",298,99\n0.67,\"3\",318,109\n0.68,\"3\",317,105\n0.81,\"4\",329,111\n0.78,\"5\",322,110\n0.65,\"3\",302,102\n0.64,\"3\",313,102\n0.64,\"2\",293,97\n0.65,\"2\",311,99\n0.68,\"2\",312,101\n0.89,\"5\",334,117\n0.86,\"4\",322,110\n0.89,\"4\",323,113\n0.87,\"4\",321,111\n0.85,\"4\",320,111\n0.9,\"4\",329,119\n0.82,\"3\",319,110\n0.72,\"3\",309,108\n0.73,\"3\",307,102\n0.71,\"3\",300,104\n0.71,\"2\",305,107\n0.68,\"2\",299,100\n0.75,\"3\",314,110\n0.72,\"2\",316,106\n0.89,\"4\",327,113\n0.84,\"3\",317,107\n0.93,\"5\",335,118\n0.93,\"5\",331,115\n0.88,\"5\",324,112\n0.9,\"5\",324,111\n0.87,\"5\",323,110\n0.86,\"5\",322,114\n0.94,\"5\",336,118\n0.77,\"3\",316,109\n0.78,\"2\",307,107\n0.73,\"2\",306,105\n0.73,\"2\",310,106\n0.7,\"3\",311,104\n0.72,\"3\",313,107\n0.73,\"3\",317,103\n0.72,\"2\",315,110\n0.97,\"5\",340,120\n0.97,\"5\",334,120\n0.69,\"3\",298,105\n0.57,\"2\",295,99\n0.63,\"2\",315,99\n0.66,\"3\",310,102\n0.64,\"2\",305,106\n0.68,\"3\",301,104\n0.79,\"4\",325,108\n0.82,\"4\",328,110\n0.95,\"4\",338,120\n0.96,\"5\",333,119\n0.94,\"4\",331,117\n0.93,\"5\",330,116\n0.91,\"4\",322,112\n0.85,\"4\",321,109\n0.84,\"4\",324,110\n0.74,\"3\",312,104\n0.76,\"3\",313,103\n0.75,\"3\",316,110\n0.76,\"4\",324,113\n0.71,\"2\",308,109\n0.67,\"2\",305,105\n0.61,\"2\",296,99\n0.63,\"2\",306,110\n0.64,\"2\",312,110\n0.71,\"3\",318,112\n0.82,\"4\",324,111\n0.73,\"3\",313,104\n0.74,\"3\",319,106\n0.69,\"2\",312,107\n0.64,\"2\",304,100\n0.91,\"5\",330,113\n0.88,\"5\",326,111\n0.85,\"4\",325,112\n0.86,\"5\",329,114\n0.7,\"3\",310,104\n0.59,\"1\",299,100\n0.6,\"1\",296,101\n0.65,\"2\",317,103\n0.7,\"3\",324,115\n0.76,\"3\",325,114\n0.63,\"2\",314,107\n0.81,\"4\",328,110\n0.72,\"3\",316,105\n0.71,\"2\",311,104\n0.8,\"3\",324,110\n0.77,\"3\",321,111\n0.74,\"3\",320,104\n0.7,\"2\",316,99\n0.71,\"2\",318,100\n0.93,\"4\",335,115\n0.85,\"4\",321,114\n0.79,\"4\",307,110\n0.76,\"3\",309,99\n0.78,\"3\",324,100\n0.77,\"4\",326,102\n0.9,\"4\",331,119\n0.87,\"5\",327,108\n0.71,\"3\",312,104\n0.7,\"2\",308,103\n0.7,\"3\",324,111\n0.75,\"2\",325,110\n0.71,\"3\",313,102\n0.72,\"2\",312,105\n0.73,\"3\",314,107\n0.83,\"4\",327,113\n0.77,\"4\",308,108\n0.72,\"2\",306,105\n0.54,\"2\",299,96\n0.49,\"1\",294,95\n0.52,\"1\",312,99\n0.58,\"1\",315,100\n0.78,\"3\",322,110\n0.89,\"5\",329,113\n0.7,\"2\",320,101\n0.66,\"2\",308,103\n0.67,\"2\",304,102\n0.68,\"3\",311,102\n0.8,\"3\",317,110\n0.81,\"3\",312,106\n0.8,\"3\",321,111\n0.94,\"4\",340,112\n0.93,\"5\",331,116\n0.92,\"5\",336,118\n0.89,\"5\",324,114\n0.82,\"4\",314,104\n0.79,\"3\",313,109\n0.58,\"2\",307,105\n0.56,\"2\",300,102\n0.56,\"2\",302,99\n0.64,\"1\",312,98\n0.61,\"2\",316,101\n0.68,\"2\",317,100\n0.76,\"3\",310,107\n0.86,\"3\",320,120\n0.9,\"3\",330,114\n0.71,\"3\",305,112\n0.62,\"2\",309,106\n0.66,\"2\",319,108\n0.65,\"2\",322,105\n0.73,\"3\",323,107\n0.62,\"2\",313,106\n0.74,\"3\",321,109\n0.79,\"3\",323,110\n0.8,\"4\",325,112\n0.69,\"3\",312,108\n0.7,\"4\",308,110\n0.76,\"3\",320,104\n0.84,\"4\",328,108\n0.78,\"4\",311,107\n0.67,\"3\",301,100\n0.66,\"2\",305,105\n0.65,\"2\",308,104\n0.54,\"2\",298,101\n0.58,\"1\",300,99\n0.79,\"3\",324,111\n0.8,\"4\",327,113\n0.75,\"3\",317,106\n0.73,\"3\",323,104\n0.72,\"2\",314,107\n0.62,\"2\",305,102\n0.67,\"3\",315,104\n0.81,\"3\",326,116\n0.63,\"3\",299,100\n0.69,\"2\",295,101\n0.8,\"4\",324,112\n0.43,\"2\",297,96\n0.8,\"3\",327,113\n0.73,\"2\",311,105\n0.75,\"3\",308,106\n0.71,\"3\",319,108\n0.73,\"4\",312,107\n0.83,\"4\",325,111\n0.72,\"3\",319,110\n0.94,\"5\",332,118\n0.81,\"5\",323,108\n0.81,\"5\",324,107\n0.75,\"3\",312,107\n0.79,\"3\",326,110\n0.58,\"3\",308,106\n0.59,\"2\",305,103\n0.47,\"2\",295,96\n0.49,\"1\",316,98\n0.47,\"2\",304,97\n0.42,\"1\",299,94\n0.57,\"1\",302,99\n0.62,\"3\",313,101\n0.74,\"3\",318,107\n0.73,\"4\",325,110\n0.64,\"2\",303,100\n0.63,\"3\",300,102\n0.59,\"2\",297,98\n0.73,\"2\",317,106\n0.79,\"3\",327,109\n0.68,\"2\",301,104\n0.7,\"2\",314,105\n0.81,\"2\",321,107\n0.85,\"3\",322,110\n0.93,\"4\",334,116\n0.91,\"5\",338,115\n0.69,\"2\",306,103\n0.77,\"3\",313,102\n0.86,\"4\",330,114\n0.74,\"3\",320,104\n0.57,\"1\",311,98\n0.51,\"1\",298,92\n0.67,\"1\",301,98\n0.72,\"2\",310,103\n0.89,\"3\",324,110\n0.95,\"4\",336,119\n0.79,\"3\",321,109\n0.39,\"2\",315,105\n0.38,\"2\",304,101\n0.34,\"2\",297,96\n0.47,\"1\",290,100\n0.56,\"1\",303,98\n0.71,\"1\",311,99\n0.78,\"3\",322,104\n0.73,\"3\",319,105\n0.82,\"4\",324,110\n0.62,\"3\",300,100\n0.96,\"4\",340,113\n0.96,\"5\",335,117\n0.46,\"2\",302,101\n0.53,\"2\",307,105\n0.49,\"2\",296,97\n0.76,\"3\",320,108\n0.64,\"2\",314,102\n0.71,\"3\",318,106\n0.84,\"4\",326,112\n0.77,\"2\",317,104\n0.89,\"4\",329,111\n0.82,\"3\",324,110\n0.84,\"3\",325,107\n0.91,\"4\",330,116\n0.67,\"3\",312,103\n0.95,\"4\",333,117"
+    },
+    {
+      "name": "scale/shape",
+      "format": {
+        "type": "csv",
+        "parse": {}
+      },
+      "values": "\"domain\"\n\"1\"\n\"2\"\n\"3\"\n\"4\"\n\"5\""
+    },
+    {
+      "name": "scale/stroke",
+      "format": {
+        "type": "csv",
+        "parse": {}
+      },
+      "values": "\"domain\"\n\"black\""
+    },
+    {
+      "name": "scale/x_gre",
+      "format": {
+        "type": "csv",
+        "parse": {
+          "domain": "number"
+        }
+      },
+      "values": "\"domain\"\n287.5\n342.5"
+    },
+    {
+      "name": "scale/x_toefl",
+      "format": {
+        "type": "csv",
+        "parse": {
+          "domain": "number"
+        }
+      },
+      "values": "\"domain\"\n90.6\n121.4"
+    },
+    {
+      "name": "scale/y",
+      "format": {
+        "type": "csv",
+        "parse": {
+          "domain": "number"
+        }
+      },
+      "values": "\"domain\"\n0.3085\n1.0015"
+    }
+  ],
+  "scales": [
+    {
+      "name": "shape",
+      "type": "ordinal",
+      "domain": {
+        "data": "scale/shape",
+        "field": "data.domain"
+      },
+      "points": true,
+      "sort": false,
+      "range": "shapes"
+    },
+    {
+      "name": "stroke",
+      "type": "ordinal",
+      "domain": {
+        "data": "scale/stroke",
+        "field": "data.domain"
+      },
+      "points": true,
+      "sort": false,
+      "range": "category10"
+    },
+    {
+      "name": "x_gre",
+      "domain": {
+        "data": "scale/x_gre",
+        "field": "data.domain"
+      },
+      "zero": false,
+      "nice": false,
+      "clamp": false,
+      "range": "width"
+    },
+    {
+      "name": "x_toefl",
+      "domain": {
+        "data": "scale/x_toefl",
+        "field": "data.domain"
+      },
+      "zero": false,
+      "nice": false,
+      "clamp": false,
+      "range": "width"
+    },
+    {
+      "name": "y",
+      "domain": {
+        "data": "scale/y",
+        "field": "data.domain"
+      },
+      "zero": false,
+      "nice": false,
+      "clamp": false,
+      "range": "height"
+    }
+  ],
+  "marks": [
+    {
+      "type": "symbol",
+      "properties": {
+        "update": {
+          "size": {
+            "value": 50
+          },
+          "y": {
+            "scale": "y",
+            "field": "data.admit_chance"
+          },
+          "shape": {
+            "scale": "shape",
+            "field": "data.factor(univ_rate)"
+          },
+          "stroke": {
+            "scale": "stroke",
+            "value": "black"
+          },
+          "x": {
+            "scale": "x_gre",
+            "field": "data.gre"
+          },
+          "fill": {
+            "value": "pink"
+          }
+        },
+        "ggvis": {
+          "data": {
+            "value": ".0"
+          }
+        }
+      },
+      "from": {
+        "data": ".0"
+      }
+    },
+    {
+      "type": "symbol",
+      "properties": {
+        "update": {
+          "size": {
+            "value": 50
+          },
+          "y": {
+            "scale": "y",
+            "field": "data.admit_chance"
+          },
+          "shape": {
+            "scale": "shape",
+            "field": "data.factor(univ_rate)"
+          },
+          "stroke": {
+            "scale": "stroke",
+            "value": "black"
+          },
+          "x": {
+            "scale": "x_toefl",
+            "field": "data.toefl"
+          },
+          "fill": {
+            "value": "lightseagreen"
+          }
+        },
+        "ggvis": {
+          "data": {
+            "value": ".0"
+          }
+        }
+      },
+      "from": {
+        "data": ".0"
+      }
+    }
+  ],
+  "legends": [
+    {
+      "orient": "right",
+      "title": "University Rating",
+      "shape": "shape"
+    },
+    {
+      "orient": "right",
+      "stroke": "stroke"
+    }
+  ],
+  "axes": [
+    {
+      "type": "x",
+      "scale": "x_gre",
+      "orient": "bottom",
+      "title": "GRE Score",
+      "layer": "back",
+      "grid": true
+    },
+    {
+      "type": "x",
+      "scale": "x_toefl",
+      "orient": "top",
+      "title": "TOEFL Score",
+      "layer": "back",
+      "grid": true,
+      "properties": {
+        "ticks": {
+          "stroke": {
+            "value": "powderblue"
+          }
+        },
+        "grid": {
+          "stroke": {
+            "value": "powderblue"
+          }
+        },
+        "labels": {
+          "fill": {
+            "value": "lightseagreen"
+          }
+        }
+      }
+    },
+    {
+      "type": "y",
+      "scale": "y",
+      "orient": "left",
+      "title": "Chance of Admissions",
+      "layer": "back",
+      "grid": true
+    }
+  ],
+  "padding": null,
+  "ggvis_opts": {
+    "keep_aspect": false,
+    "resizable": true,
+    "padding": {},
+    "duration": 250,
+    "renderer": "svg",
+    "hover_duration": 0,
+    "width": 672,
+    "height": 480
+  },
+  "handlers": null
+};
+ggvis.getPlot("plot_id539281166").parseSpec(plot_id539281166_spec);
+</script>
+</div>
 </div>
 </div>
 
