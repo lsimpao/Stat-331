@@ -5,13 +5,11 @@ date: "March 6, 2019"
 output: 
   html_document:
     toc: true
-    toc_float: TRUE
+    toc_float: true
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, 
-                      fig.width = 6, 
-                      fig.height = 4)
+knitr::opts_chunk$set(echo = TRUE)
 ```
 
 # Introduction to ggvis
@@ -22,11 +20,11 @@ The ggvis package allows for data visualization. It allows users to
 * Produce interactive graphics that can modified locally in RStudio or on a browser.
 * Work well with the Shiny platform to publish interactive graphics to use on any browser.
 
-This document allows you to understand the basics of ggvis' tools and how to apply them to data. Because data is often so large, it may be hard to understand and visualization allows us to see patterns and draw conclusions.
+This document allows you to understand the basics of ggvis' tools and how to apply them to data. Because data is often so large, it may be hard to understand and visualization allows us to see patterns and draw conclusions. 
 
-### Data: adminpred
+## Data: adminpred
 
-To explore the visualization capabilities of ggvis, we'll use adminpred. This data comes from Mohan S Acharya. It contains contains Serial, GRE Scores, TOEFL Scores, University Ratings, Strength of the Statement of Purpose, Strength of the Letter of Recommendation, Undergraduate GPA, Research Experience, and Chance of Admission.
+To explore the visualization capabilities of ggvis, we'll use adminpred. This data comes from [Mohan S Acharya](https://www.kaggle.com/mohansacharya/graduate-admissions "Graduate Admissions | Kaggle"). It contains contains Serial, GRE Scores, TOEFL Scores, University Ratings, Strength of the Statement of Purpose, Strength of the Letter of Recommendation, Undergraduate GPA, Research Experience, and Chance of Admission.
 
 ```{r data_setup, include = FALSE}
 library(readr)
@@ -35,6 +33,7 @@ names(adminpred) <- c("serial","gre","toefl","univ_rate","state_purp","letter_re
 adminpred$research_exp <- as.factor(adminpred$research_exp)
 adminpred$univ_rate <- as.factor(adminpred$univ_rate)
 ```
+
 ```{r load_pkg_data, message = FALSE, collapse = TRUE}
 library(tidyverse)
 library(ggvis)
@@ -108,10 +107,10 @@ adminpred %>%
 
 A categorical variable is used as the x variable to make the box plots for. For this plot, gre is used as the y-axis; the box plot shows the spread of applicant's GRE scores for each university type.
 
-```{r boxplot}
+```{r boxplot, warning = FALSE}
 adminpred %>% 
   ggvis(~factor(univ_rate), ~gre) %>% 
-  layer_boxplots
+  layer_boxplots()
 ```
 
 ### Graphs
@@ -139,13 +138,6 @@ adminpred %>%
   ggvis(~gre, ~toefl) %>%
   layer_lines()
 ```
-
-### Simple additions to graphs
-
-Additional layers that may be added are:
-add_axis() can be added to add axis labels.
-
-> add_axis("x", title = "GRE Score")
 
 ***
 
@@ -179,9 +171,9 @@ There are a lots of interactive controls we could use for the layers in ggvis, f
 
 ***
 
-## More layers
+## More Layers
 
-ggvis also has more graphs that what's already been shown.
+ggvis also has more graphs that what's already been shown and what is outlined here. An example for layer_text() is shown below.
 
 Paths and polygons
 
@@ -201,6 +193,80 @@ adminpred %>%
 
 ***
 
-## Layers
-ggvis
-Using the adminpred dataset, we 
+## Customize Appearance
+
+Piping the visualizations made to more layers can allow users to add axes and legends, define scales, and customize the appearance of the graphs using properties.
+
+### Axes and legends
+
+To modify the axis' label, when piped into a ggvis function:
+
+> add_axis("x", title = "the x variable")
+
+Axes placement can be controlled, using the orient argument or the offset argument.
+
+> add_axis("x", orient = "top/bottom/left/right")
+> add_axis("x, offset = N)
+
+To add a legend, when piped into a ggvis function the first line of code may be used. The second one allows for multiple scales to be displayed in one legend. Note that legends are not defined by variables but by arguments in the layer that defines the graph being produced. Examples are shown here:
+
+> add_legend("fill", title = "fill variable")
+> add_legend("fill", "size")
+
+To combine legends, one would have to mmanually do so, by supplying the name of multiple scales to one legend. An example of this will be shown below.
+
+### Scales
+
+In ggvis, scales control the mapping between the data values and values interpreted by the drawing device, just like ggplot2. However, comparing to ggplot2, ggvis has far fewer scales (3 vs 70), and with each function doing much more. 
+
+There are three basic scales in ggvis, which are called the three basic vega scales:
+
+* scale_numeric() for quantitative, numeric values
+* scale_ordinal() for qualitative, categorical values
+* scale_time() for date/time values
+
+By default, scales are added so that every scaled property gets a scale with the same name as the property (with a few exceptions y2 to y, x2 to x, fillOpacity and strokeOpacity to opacity and so on.).
+
+### Scale arguments
+These are some arguments for the scales:
+
+* name: the argument as a string identifier for the scale.
+* domain: the input data values to the scale. 
+* range: the output visual values from the scale. Usually a vector of length two for quantiative scales, for ordinal scales, it’s a vector the same length as the domain.
+* reverse: a boolean flag that will flip the order of the range.
+
+There are a lot we can play with for scales and properties. For example, we could do multiple scales for one property.
+
+### Properties for visual customization
+
+Axes and legends share properties that are defined in a list of props(). Take note of the code below to see how axes and properties work together.
+
+```{r all_together}
+
+adminpred %>% ggvis(y = ~admit_chance, 
+            shape = ~factor(univ_rate)) %>%
+  layer_points(prop("x", ~gre, 
+            scale = "x_gre"), 
+            fill := "pink", 
+            stroke = "black") %>%
+  layer_points(prop("x", ~toefl, 
+            scale = "x_toefl"), 
+            fill := "lightseagreen", 
+            stroke = "black") %>%
+  add_axis("x", 
+           scale = "x_gre", 
+           title = "GRE Score", 
+           orient = "bottom") %>%
+  add_axis("x", 
+           scale = "x_toefl", 
+           title = "TOEFL Score", 
+           orient = "top", 
+           properties = axis_props(
+             grid = list(stroke = "powderblue"),
+             ticks = list(stroke = "powderblue"),
+             labels = list(fill = "lightseagreen"))) %>% 
+  add_axis("y", 
+           title = "Chance of Admissions") %>% 
+  add_legend("shape",
+           title = "University Rating")
+```
