@@ -9,13 +9,7 @@ library(RSQLite)
 admitdec <- read_csv("Admissions_DATA.csv")
 names(admitdec) <- c("serial","gre","toefl","univ_rate","state_purp","letter_rec","ug_gpa", "research_exp","decision")
 
-# For dropdown menu
-actionLink <- function(inputId, ...) {
-  tags$a(href='javascript:void',
-         id=inputId,
-         class='action-button',
-         ...)
-}
+# dropdown menu
 
 fluidPage(
   titlePanel("Admissions Prediction"),
@@ -50,7 +44,7 @@ fluidPage(
            )
     ),
     column(9,
-           ggvisOutput("plot1")
+           ggvisOutput(plot_id = "plot1")
     )
   )
 )

@@ -6,14 +6,16 @@ library(readr)
 library(RSQLite)
 
 # load data
+
 admitdec <- read_csv("Admissions_DATA.csv")
 names(admitdec) <- c("serial","gre","toefl","univ_rate","state_purp","letter_rec","ug_gpa", "research_exp","decision")
 
 function(input, output, session) {
   
-  # Filter the movies, returning a data frame
-  admit <- reactive({
-    # Due to dplyr issue #318, we need temp variables for input values
+# filter admissions_DATA, returning a data frame
+
+    admit <- reactive({
+    
     GRE <- input$gre
     TOEFL <- input$toefl
     GPA <- input$ug_gpa
@@ -22,7 +24,7 @@ function(input, output, session) {
     minREC <- input$letter_rec[1]
     maxREC <- input$letter_rec[2]
     
-    # Apply filters
+# apply filters
     m <- admitdec %>%
       filter(
         gre >= GRE,
@@ -37,8 +39,8 @@ function(input, output, session) {
     
     m <- as.data.frame(m)
     
-    # Add column which says whether the movie won any Oscars
-    # Be a little careful in case we have a zero-row data frame
+# add column for final admissions decision
+    
     m$admitted <- m$decision
     m$admitted[m$decision == 0] <- "Rejected"
     m$admitted[m$decision == 0.5] <- "Waitlisted"
@@ -46,15 +48,18 @@ function(input, output, session) {
     m
   })
   
-  # A reactive expression with the ggvis plot
+# reactive expression with the ggvis plot
+    
   vis <- reactive({
     
+    xvar <- prop("x", as.symbol(input$xvar))
+    yvar <- prop("y", as.symbol(input$yvar))
+    
     admit %>%
-      ggvis(x = input$xvar, y = input$yvar) %>%
+      ggvis(x = xvar, y = yvar) %>%
       layer_points(size := 50, size.hover := 200,
                    fillOpacity := 0.2, fillOpacity.hover := 0.5,
                    stroke = ~admitted) %>%
-      
       add_legend("stroke", title = "Admission Decision", values = c("Admitted", "Waitlisted", "Rejected")) %>%
       scale_nominal("stroke", domain = c("Admitted", "Waitlisted", "Rejected"),
                     range = c("limegreen", "orange", "#aaa")) %>%
