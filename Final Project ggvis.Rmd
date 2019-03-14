@@ -1,7 +1,7 @@
 ---
 title: 'Final Project: ggvis'
 author: "Luisa Simpao & Kelly Ye"
-date: "March 6, 2019"
+date: "March 15, 2019"
 output: 
   html_document:
     toc: true
@@ -24,13 +24,17 @@ This document allows you to understand the basics of ggvis' tools and how to app
 
 ## Data: adminpred
 
-To explore the visualization capabilities of ggvis, we'll use adminpred. This data comes from [Mohan S Acharya](https://www.kaggle.com/mohansacharya/graduate-admissions "Graduate Admissions | Kaggle"). It contains contains Serial, GRE Scores, TOEFL Scores, University Ratings, Strength of the Statement of Purpose, Strength of the Letter of Recommendation, Undergraduate GPA, Research Experience, and Chance of Admission.
+To explore the visualization capabilities of ggvis, we'll use adminpred. This data comes from [Mohan S Acharya](https://www.kaggle.com/mohansacharya/graduate-admissions "Graduate Admissions | Kaggle"). It contains contains Serial No., GRE Scores, TOEFL Scores, University Ratings, Strength of the Statement of Purpose, Strength of the Letter of Recommendation, Undergraduate GPA, Research Experience, and Chance of Admission.
+
+University Ratings, Strength of the Statement of Purpose, and Strength of the Letter of Recommendation are factors on five-point scales. Research Experience is an indicator variable (0 = without, 1 = with).
 
 ```{r data_setup, include = FALSE}
 library(readr)
 adminpred <- read_csv("Admission_Predict.csv")
 names(adminpred) <- c("serial","gre","toefl","univ_rate","state_purp","letter_rec","ug_gpa", "research_exp","admit_chance")
 adminpred$research_exp <- as.factor(adminpred$research_exp)
+adminpred$state_purp <- as.factor(adminpred$state_purp)
+adminpred$letter_rec <- as.factor(adminpred$letter_rec)
 adminpred$univ_rate <- as.factor(adminpred$univ_rate)
 ```
 
@@ -78,34 +82,32 @@ The ggvis package has many different plot options:
     + use model =  to call for a type of model; this needs to be defined for the model to run properly; notice that it is not :=
 * layer_boxplots() for box plots
 
-First, an example of a regression line added on a scatter plot:
+First, an example of a regression line added on to a scatter plot:
 ```{r reg_plots}
 adminpred %>% 
   ggvis(~gre, ~toefl) %>% 
-  layer_points() %>% 
-  layer_smooths()
+  layer_points(opacity := 0.7) %>% 
+  layer_smooths(stroke := "green")
 ```
 
-Also: We we use the option 'model' to create a linear model, using layer_model_predictions(). 
-
-The same grouping used in regular R code and ggplot2. We use the fill option to color points in layer_points() for whether or not applicants had research experience. 
+Distinct groups can be shown in visualizations, similar to how they are shown with ggplot2. Instead of using a separate group_by() statement, the fill option is used to show the groups. In the example below, shows whether applicants have or have not had research experience. Additionally, a linear model -- as defined by the model option -- is overlay over the data points.
 ```{r lm_plot}
-adminpred %>%
+adminpred %>% 
   ggvis(~gre, ~toefl) %>%
   layer_points(fill = ~factor(research_exp)) %>% # note that it is only an "=" here, rather than ":=" 
   layer_model_predictions(model = "lm")
 ```
 
-The group_by() function is used to create linear models for the types of universities that applicants are applying for by piping the layer_model_predictions() to it.
+The layer layer_model_predictions() is piped into a group_by() function to create separate linear models for applicants with or without research experience.
 ```{r grouped}
 adminpred %>%
-  ggvis(~gre, ~toefl, fill = ~factor(univ_rate)) %>%
+  ggvis(~gre, ~toefl, fill = ~factor(research_exp)) %>%
   layer_points() %>%
-  group_by(univ_rate) %>%
+  group_by(research_exp) %>%
   layer_model_predictions(model = "lm")
 ```
 
-A categorical variable is used as the x variable to make the box plots for. For this plot, gre is used as the y-axis; the box plot shows the spread of applicant's GRE scores for each university type.
+A categorical variable is used as the x variable to make the box plots for. For this plot, GRE Scores (gre) are shown on the y-axis; the box plot shows the spread of applicant's GRE scores for each type of university.
 
 ```{r boxplot, warning = FALSE}
 adminpred %>% 
@@ -121,7 +123,7 @@ Graphs can also be created using ggvis! Graphs that can be made include:
     + use width = to specify the width of the bar
 * layer_histograms() for a histogram; note that this only needs an x variable
     + use width = to specify the width of the bar; in this case, a greater width increases the range of x covered by the bar
-* layer_lines()
+* layer_lines() fpr a line graph
   
 ```{r bar_graph}
 adminpred %>% 
@@ -187,7 +189,7 @@ To find the top-scoring applicant in the GRE and TOEFL, layer_text() is used to 
 ```{r text}
 adminpred %>% 
   filter(research_exp == 0) %>% 
-  ggvis(~gre, ~toefl, text := ~serial) %>%
+  ggvis(~gre, ~toefl, text := ~serial, fontSize := 15) %>%
   layer_text()
 ```
 
@@ -208,12 +210,12 @@ Axes placement can be controlled, using the orient argument or the offset argume
 > add_axis("x", orient = "top/bottom/left/right")
 > add_axis("x, offset = N)
 
-To add a legend, when piped into a ggvis function the first line of code may be used. The second one allows for multiple scales to be displayed in one legend. Note that legends are not defined by variables but by arguments in the layer that defines the graph being produced. Examples are shown here:
+To add a legend, the first line of code may be used below may be piped into a ggvis function. The second one allows for multiple scales to be displayed in one legend. Note that legends are not defined by variables but by arguments in the layer that defines the graph being produced. Examples are shown here:
 
 > add_legend("fill", title = "fill variable")
 > add_legend("fill", "size")
 
-To combine legends, one would have to mmanually do so, by supplying the name of multiple scales to one legend. An example of this will be shown below.
+To combine legends, one would have to manually do so, by supplying the name of multiple scales to one legend. An example of this will be shown below.
 
 ### Scales
 
@@ -235,11 +237,11 @@ These are some arguments for the scales:
 * range: the output visual values from the scale. Usually a vector of length two for quantiative scales, for ordinal scales, it’s a vector the same length as the domain.
 * reverse: a boolean flag that will flip the order of the range.
 
-There are a lot we can play with for scales and properties. For example, we could do multiple scales for one property.
+There is a lot we can play with for scales and properties. For example, we could do multiple scales for one property.
 
 ### Properties for visual customization
 
-Axes and legends share properties that are defined in a list of props(). Take note of the code below to see how axes and properties work together.
+Axes and legends share properties that are defined in a list of props().In the example below, multiple scales are used for one property - two x scales are used to show the different values on the y. Take note of the code below to see how axes, scales, and properties work together.
 
 ```{r all_together}
 
@@ -248,11 +250,11 @@ adminpred %>% ggvis(y = ~admit_chance,
   layer_points(prop("x", ~gre, 
             scale = "x_gre"), 
             fill := "pink", 
-            stroke = "black") %>%
+            stroke := "gray4") %>%
   layer_points(prop("x", ~toefl, 
             scale = "x_toefl"), 
             fill := "lightseagreen", 
-            stroke = "black") %>%
+            stroke := "gray4") %>%
   add_axis("x", 
            scale = "x_gre", 
            title = "GRE Score", 
@@ -270,3 +272,20 @@ adminpred %>% ggvis(y = ~admit_chance,
   add_legend("shape",
            title = "University Rating")
 ```
+
+Observe below how multiple properties are used for one scale. We force stroke and fill to use the same scale.
+```{r}
+adminpred %>% 
+  ggvis(x = ~gre, 
+        y = ~admit_chance, 
+        stroke = ~ug_gpa, 
+        fill = ~toefl, 
+        strokeWidth := 5, 
+        size := 200) %>%
+  layer_points() %>%
+  add_legend("stroke", 
+             properties = legend_props(legend = list(y = 50)))
+```
+
+
+
