@@ -57,13 +57,16 @@ function(input, output, session) {
     
     admit %>%
       ggvis(x = xvar, y = yvar) %>%
-      layer_points(size := 50, size.hover := 200,
-                   fillOpacity := 0.2, fillOpacity.hover := 0.5,
-                   stroke = ~admitted) %>%
+      layer_points(size := 120, size.hover := 150,
+                   fillOpacity := 0.3, fillOpacity.hover := 0.5,
+                   fill = ~admitted, stroke = ~admitted) %>%
+      add_legend("fill", title = "Admission Decision", values = c("Admitted", "Waitlisted", "Rejected")) %>%
       add_legend("stroke", title = "Admission Decision", values = c("Admitted", "Waitlisted", "Rejected")) %>%
+      scale_nominal("fill", domain = c("Admitted", "Waitlisted", "Rejected"),
+                    range = c("limegreen","orange", "lightsteelblue")) %>%
       scale_nominal("stroke", domain = c("Admitted", "Waitlisted", "Rejected"),
-                    range = c("limegreen", "orange", "#aaa")) %>%
-      set_options(width = 500, height = 500)
+                    range = c("limegreen","orange", "lightsteelblue")) %>%
+      set_options(width = 800, height = 800)
   })
   
   vis %>% bind_shiny("plot1")

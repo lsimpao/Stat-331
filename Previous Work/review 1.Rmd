@@ -1,0 +1,61 @@
+---
+title: 'In-Class Activity: Review 1'
+author: "Luisa Simpao"
+date: "March 12, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r packages, message = FALSE}
+library(tidyverse)
+library(dplyr)
+```
+
+## task one
+```{r function}
+caesar <- function(word, shift_by){
+
+  letters <- c("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z") 
+  
+  letters <- data.frame(letters)
+  names(letters) <- "char"
+  letters$num <- 0:25
+  
+  as.character(word)
+  wordsplit <- strsplit(word,"")
+  wordsplit <- data.frame(wordsplit)
+  names(wordsplit) <- "char"
+  nums <- letters %>% 
+    filter(char %in% wordsplit$char)
+  
+  joined <- left_join(wordsplit, nums, by = "char")
+  
+  joined <- joined %>% 
+    mutate(num = (num + (shift_by))%%26)
+
+  letters_sub <- letters %>% 
+    filter(num %in% joined$num)
+  
+  joined <- left_join(joined, letters_sub, by = "num")
+  
+  final <- as.vector(joined$char.y)
+  
+  final <- paste(final, collapse = "")
+  
+  return(final)
+}
+
+caesar("sfzqlov", -23)
+```
+## task two
+```{r decode, message = FALSE}
+message <- read.csv("https://www.dropbox.com/s/ctplwmkvey4yo0e/cs_encrypted.txt?dl=1", stringsAsFactors = FALSE, header = TRUE)$x
+shifts <- c(1:26)
+map_chr(shifts, ~caesar(message[1], .x))
+
+message_long <- paste(message, collapse = "")
+caesar(message_long, 9)
+```

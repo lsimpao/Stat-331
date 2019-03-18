@@ -1,0 +1,28 @@
+---
+title: "Lab4_Pokemon"
+author: "Luisa Simpao"
+date: "2/7/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Question: What makes a Pokemon a good fighter? (Extra credit if best analysis!)
+```{r}
+library(tidyverse)
+pokes <- read.csv("https://www.dropbox.com/s/i0lwxgv86eaoq4o/pokemon.csv?dl=1")
+```
+
+1. At least one plot, with proper labels.
+```{r}
+
+```
+
+2. At least one statistical analysis or moderl.
+```{r}
+
+```
+
+3. Proper discussion and interpretation of all work.

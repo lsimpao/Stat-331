@@ -1,0 +1,86 @@
+---
+title: "HipHop Activity"
+author: "Luisa Simpao"
+date: "1/10/2019"
+output: html_document
+---
+
+```{r}
+
+# (1)
+hiphop <- read.csv("https://raw.githubusercontent.com/kbodwin/STAT-331/master/In-Class%20Activities/Data/hiphop.csv?token=AVHCwRXHTU_HZuxL-Iofhjhi-QqAgfxOks5cSRj-wA%3D%3D")
+library(tidyverse)
+
+```
+
+``` {r}
+
+head(hiphop)
+str(hiphop)
+
+```
+  (2) - using code from Chunk 2 (above)
+  There are 38 variables in this data set, encompassing the different types of variables in R.
+  Factors: word (64 levels), subj (168 levels), sex (2 levels), ethnic (9 levels)
+  Numeric variables: city, county, bieber, asianMove, blackMove, hispanicMove, nativeMove, SAAMEMove, whiteMove, blackWeekly
+  Integer variables: age, intl, vocal, classical, folk, rock, country, pop, alternative, hiphop, unclassifiable, countyBlack, jayz, barkley, boondocks, monique, jayz1, boondocks1, familiarity1, trial , fam1. popularityScore, numPreferredArtists, numOverallArtists
+  
+  (3) - using code from Chunk 2 (above)
+  The table 10752 x 38, having 10,752 rows and 38 columns.
+  There are 38 columns for the 38 variables, and 10,752 observations for the 64 words being tested on 168 subjects.
+  
+```{r}
+
+# (4)
+# The code below calls a list of the 64 AAE terms
+unique(hiphop$word)
+
+```
+
+```{r}
+# (5)
+missing <- is.na(hiphop)
+levels(missing) <- c(TRUE,FALSE)
+count_missing <- factor(missing)
+summary(missing)
+# numPreferredArtists and numOverallArtists have missing values
+
+# (6)
+# There are 5632 missing values for the two variables, a total of 11264 missing values.
+
+```
+
+```{r}
+
+# (7)
+mean(hiphop$numPreferredArtists, na.rm = TRUE)
+sqrt(var(hiphop$numPreferredArtists, na.rm = TRUE))
+# The mean is 0.3385 and the standard deviation is 0.7357.
+
+```
+
+```{r}
+
+# 8
+subject19 <- hiphop[hiphop$subj == "p19",]
+str(subject19)
+# The data frame subject19 has 64 rows and 38 columns. 
+
+```
+
+```{r}
+
+# (9)
+# Below is code to display the values for the familiarity variable for subject19
+subject19$familiarity
+# Below is code to obtain simple statistcs about the familiarity variable for subject19
+summary(subject19$familiarity)
+
+```
+
+```{r}
+
+# 10
+subject19 <- subject19[order(subject19$familiarity),]
+
+```

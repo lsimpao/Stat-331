@@ -1,0 +1,185 @@
+---
+title: "8_Activity_Testing"
+author: "Luisa Simpao"
+date: "February 6, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(broom)
+
+data("starwars")
+
+```
+
+# Instructions
+
+The dataset "starwars" has been loaded for you.  Take a look at it and understand the variables. 
+
+## Writing your own t-test
+
+Write a function called `run_t_test` that takes as input two vectors of numbers, and an option for the alternative hypothesis, and gives back the results of a t-test for equality of means.  You may not use the function `t.test()` except to check that your version is working correctly.
+
+```{r}
+run_t_test <- function(x, y, alternative = "two.sided"){
+  
+  na.omit(x)
+  na.omit(y)
+  
+  mx <- mean(x)
+  my <- mean(y)
+  
+  nx <- length(x)
+  ny <- length(y)
+  
+  sdx <- sd(x)
+  sdy <- sd(y)
+  
+  SE <- sqrt(sdx^2/nx + sdy^2/ny)
+  
+  t.score <- (mx - my)/SE
+  
+  df <- min(nx, ny) - 1
+  
+  if(alternative == "two.sided"){
+    pval <- 2*pt(-abs(t.score), df = df)
+  } else if (alternative == "greater") {
+    pval <- 1-pt(t.score, df = df)
+  }
+  
+  return(list(test.stat = t.score, df = df, p.val = pval))
+}
+
+# test
+bob <- 1:10
+joe <- 1:20
+run_t_test(bob, joe)
+```
+
+Use your t-test function to answer the following:
+
+1. Are Humans or Droids taller?
+2. Do men or women weigh more?
+
+```{r}
+
+#1 human v droid height: After filtering for null values in human and droid heights, a t-test was conducted. At the 0.05 significance level, there does not appear to be a significant difference (p-value = 0.2549) between Droid and Human's heights in the Star Wars universe. It is fair to mention that there were less droids (4) than humans (31) accounted for in this test, so these may not be fair results.
+
+human <- starwars %>%
+  filter(species == "Human") %>%
+  select(height) %>% 
+  filter(!is.na(height)) %>% 
+  unlist()
+droid <- starwars %>%
+  filter(species == "Droid") %>%
+  select(height) %>% 
+  filter(!is.na(height)) %>%
+  unlist()
+run_t_test(human, droid)
+  
+#2 men v women weight: After filtering for null values for male and female characters only, a t-test was conducted. At the 0.05 significance level, there appears to be a significant difference (p-value = 0.00044) between the mass of male and female characters in the Star Wars Universe.
+
+men <- starwars %>%
+  filter(gender == "male") %>%
+  select(mass) %>% 
+  filter(!is.na(mass)) %>% 
+  unlist()
+women <- starwars %>%
+  filter(gender == "female") %>%
+  select(mass) %>% 
+  filter(!is.na(mass)) %>%
+  unlist()
+run_t_test(men, women)
+  
+```
+
+## Chi-square tests
+
+Use the function `chisq.test()` to answer the following:
+
+1. Is there a relationship between hair color and eye color?
+2. Do Droids tend to come from some homeworlds more than others?
+
+```{r}
+
+#1 hair and eye: After grouping eye colors to be cool or warm and hair colors to be light, dark, or none, based on the generated p-value, there does not appear to be a significant difference in eye colors dependingo on the different hair colors that characters in the Star Wars universe.
+
+starwars_eh <- starwars %>%
+  na.omit(hair_color) %>%
+  na.omit(eye_color) %>% 
+  mutate(
+    eye_color = case_when
+    (eye_color == "blue-gray" ~ "cool",
+     eye_color == "blue" ~ "cool",
+     eye_color == "yellow" ~ "warm",
+     eye_color == "red" ~ "warm",
+     eye_color == "orange" ~ "warm",
+     eye_color == "black" ~ "cool",
+     eye_color == "brown" ~ "warm",
+     eye_color == "hazel" ~ "warm"
+  )) %>%
+  mutate(
+    hair_color = case_when
+    (hair_color == "auburn, white" ~ "light",
+     hair_color == "brown, grey" ~ "dark",
+     hair_color == "brown" ~ "dark",
+     hair_color == "black" ~ "dark",
+     hair_color == "blond" ~ "light",
+     hair_color == "grey" ~ "light",
+     hair_color == "white" ~ "light",
+     hair_color == "none" ~ "none"))
+starwars_eh %>%
+  count(hair_color, eye_color) %>%
+  spread(key = eye_color, value = n) %>% 
+  select(cool:warm) %>%
+  chisq.test() %>%
+  tidy()
+
+#2 droid worlds: Filtering for only Droid species, 5 observations were pulled. I chose not to filter for NA in homeworlds as not having a homeworld (i.e. being made on a ship), still counts as a droid origin. Based on the generated p-value, there does not seem to be a significant difference in where droid come from. However, we need to remember that only 5 droids were accounted for in our data, so this is not a fair sample or representation of the entire Droid population.
+
+starwars_dw <- starwars %>% 
+  filter(species == "Droid")
+starwars_dw %>% 
+  count(species, homeworld) %>%
+  spread(homeworld, value = n) %>%
+  select(2:4) %>% 
+  chisq.test() %>% 
+  tidy()
+
+```
+
+## Many tests (optional)
+
+On which worlds is the height difference between men and women most pronounced?
+
+```{r}
+gender_by_homeworld <- starwars %>% 
+  filter(!is.na(height), !is.na(homeworld), gender == "male" | gender == "female") %>%
+  group_by(homeworld) %>% 
+  nest()
+
+# map_df(gender_by_homeworld$data, 
+#                  ~tidy(run_t_test(height, gender)))
+
+# alternative method: Alderaan, Naboo, and Tatooine have the biggest differences in height.
+
+starwars %>% 
+  filter(!is.na(height), !is.na(homeworld), gender == "male" | gender == "female") %>%
+  group_by(homeworld, gender) %>% 
+  summarize_at(
+    vars(height), 
+    funs(mean)) %>% 
+  spread(key = gender, value = height) %>%
+  filter(!is.na(female), !is.na(male)) %>% 
+  mutate(difference = female - male) %>%
+  arrange(desc(abs(difference)))
+
+```
+
+
+

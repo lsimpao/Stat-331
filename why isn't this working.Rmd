@@ -1,0 +1,39 @@
+---
+title: "10_Minimal Reproducible"
+author: "Luisa Simpao"
+date: "February 26, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+
+library(tidyverse)
+
+nba <- data.frame(
+  Height = c("5-9", "170cm")
+  )
+
+fix_height <- function(h){
+  
+  if (str_detect(h, "-")) {
+    
+    fi <- unlist(str_split(h, "-"))
+    h <- as.numeric(fi[1])*12 + as.numeric(fi[2])
+    
+  } else if (str_detect(h, "cm")) {
+    
+    h <- str_replace(h, "cm", "")
+    h <- as.numeric(h)*0.3937
+    
+  }
+  
+  return(h)
+  
+}
+
+fix_height(nba$Height)
+```

@@ -1,0 +1,89 @@
+---
+title: 'In-Class Assignment: Review 2'
+author: "Luisa Simpao"
+date: "March 12, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, 
+                      fig.width = 6, 
+                      fig.height = 4)
+```
+
+```{r packages, message = FALSE}
+library(tidyverse)
+library(modelr)
+library(broom)
+```
+
+```{r cauchy}
+#1
+cauchy_sample <- rcauchy(100, location = 0, scale = 1)
+
+#2
+boots_sample <- replicate(1000, sample(cauchy_sample, replace = TRUE), simplify = FALSE)
+
+```
+
+```{r function}
+boot_mean <- function(sample){
+  
+  boots_sample <- replicate(1000, sample(sample, replace = TRUE), simplify = FALSE)
+  
+  boots_means <- map_dbl(boots_sample, mean)
+  return(quantile(boots_means, c(0.025, .975)))
+
+}
+
+boot_medi <- function(sample){
+  
+  boots_sample <- replicate(1000, sample(sample, replace = TRUE), simplify = FALSE)
+  
+  boots_medians <- map_dbl(boots_sample, median)
+  return(quantile(boots_medians, c(0.025, .975)))
+
+}
+```
+
+```{r repetitions}
+mean_CIs <- data.frame()
+medi_CIs <- data.frame()
+means <- c()
+medians <- c()
+
+set.seed(35)
+for(i in 1:10){
+  
+  cauchy_sample <- rcauchy(100, location = 0, scale = 1)
+  
+  means <- c(means, mean(cauchy_sample))
+  
+  medians <- c(medians, median(cauchy_sample))
+  
+  mean_CIs <- rbind(mean_CIs, boot_mean(cauchy_sample))
+  
+  medi_CIs <- rbind(medi_CIs, boot_medi(cauchy_sample))
+  
+}
+
+  names(mean_CIs) <- c("lower", "upper")
+  names(medi_CIs) <- c("lower", "upper")
+  
+```
+
+```{r plots}
+mean_CIs %>% 
+  ggplot(aes(x = c(1:10), ymax = upper, ymin = lower)) + 
+  geom_ribbon(fill = "pink") + 
+  ggtitle("95% Confidence Ranges for Means") + 
+  xlab("Repetition #") + 
+  ylab("Mean Values")
+
+medi_CIs %>% 
+  ggplot(aes(x = c(1:10), ymax = upper, ymin = lower)) + 
+  geom_ribbon(fill = "pink") + 
+  ggtitle("95% Confidence Ranges for Medians") + 
+  xlab("Repetition #") + 
+  ylab("Median Values")
+```

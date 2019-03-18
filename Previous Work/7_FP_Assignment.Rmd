@@ -1,0 +1,88 @@
+---
+title: "In-Class Activity: Functional Programming"
+author: "Luisa Simpao"
+date: "February 5, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, eval = FALSE)
+```
+
+Copy your `sing_song` function (and any other functions it depends on) into the chunk below.  Change the part that says "my true love sent to me" to "my college gave to me".
+
+```{r}
+### Your functions here
+sing_song <- function(data){
+  
+  # STEP ONE
+pluralize_gifts <- function(gift, day){
+  
+  skip <- (day == 1) | str_detect(gift, pattern = "y$") | str_detect(gift, pattern = "oo")
+  
+  gift <- gift %>% str_replace(pattern = "oo", replacement = "ee") %>%
+    str_replace(pattern = "y$", replacement = "ies")
+
+  gift[!skip] <- paste(gift[!skip], "s", sep ="")
+  
+  return(gift)
+} 
+
+data <- data %>% 
+  mutate(Plural.Gifts = pluralize_gifts(Gift.Item, Day))
+  
+  # STEP TWO
+make_phrase <- function(num, item, verb, adjective, location){
+  phrase <- paste(num, adjective, item, verb, location) %>%
+    str_replace_all(pattern = "NA", replacement = "") %>% 
+    str_replace_all(pattern = "    $", replacement = "")
+  
+  return(phrase)
+}
+
+data <- data %>% 
+  mutate(Phrases = make_phrase(Day, Plural.Gifts, Verb, Adjective, Location))  
+  
+  # STEP THREE & FOUR
+sing_line <- function(day){
+for (i in 1:12){
+  
+  if (i == 2){
+  print(paste("On the ", data$Day.in.Words[i], "day of Christmas, my college gave to me", data$Phrase[i], "and"))
+  } else if (i == 1){
+  print(paste("On the ", data$Day.in.Words[i], "day of Christmas, my college gave to me", data$Phrase[i], "."))
+  } else {
+  print(paste("On the ", data$Day.in.Words[i], "day of Christmas, my college gave to me", data$Phrase[i], ","))
+  }
+  j <- i
+  while(j > 1){
+    if(j >= 4){
+    print(paste(data$Phrase[j-1], ","))
+    } else if (j == 3) {
+    print(paste(data$Phrase[j-1], "and"))
+    } else {
+    print(paste(data$Phrase[j-1], "."))
+    }
+    
+    j <- j - 1
+  }
+  
+}
+}
+
+sing_line(data$Day)
+  
+}
+
+```
+
+Then knit the file and turn it in to PolyLearn.
+
+```{r}
+### DO NOT CHANGE ANYTHING IN THIS CHUNK
+
+xmas2 <- read.csv("https://www.dropbox.com/s/ap2hqssese1ki4j/xmas_2.csv?dl=1")
+
+sing_song(xmas2)
+
+```

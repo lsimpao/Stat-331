@@ -1,0 +1,34 @@
+---
+title: 'In-Class Activity: Recreate a Plot'
+author: "Luisa Simpao"
+date: "1/24/2019"
+output: html_document
+---
+
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+hiphop <- read.csv("https://www.dropbox.com/s/1qqyshx5ikt9zoc/hiphop.csv?dl=1")
+```
+
+```{r}
+culture <- hiphop %>% 
+  filter (ethnic != "black") %>%
+  distinct(subj, .keep_all = TRUE) %>%
+  mutate(has_black_friends = case_when(
+    blackMove > 0 ~ TRUE,
+    TRUE ~ FALSE)) %>%
+  group_by(has_black_friends) %>% 
+  summarize_at(
+    vars(barkley, bieber, boondocks, jayz, monique), 
+    funs(mean))
+
+culture %>%
+  gather(key = culture, value = knowledge, -has_black_friends) %>%
+  ggplot(aes(x = culture, y = knowledge, fill = has_black_friends)) +
+  geom_col(position = "dodge") + 
+  ggtitle("Do non-black people with black friends know more abut black culture?") + 
+  xlab("culture_question") + 
+  ylab("avg_score")
+```

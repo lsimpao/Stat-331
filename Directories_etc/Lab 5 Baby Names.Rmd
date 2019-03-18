@@ -1,0 +1,70 @@
+---
+title: "Lab 5: Baby Names"
+author: "Luisa Simpao"
+date: "February 21, 2019"
+output: html_document
+---
+
+```{r setup, include = FALSE, echo = FALSE}
+knitr::opts_chunk$set(fig.width = 8, 
+                      fig.length = 4, 
+                      echo = FALSE)
+```
+
+```{r load packages and data, include = FALSE}
+library(tidyverse)
+library(readxl)
+bb <- read_excel("Babyname_Datasets/babies_ca.xlsx")
+charlie <- bb %>% filter(Name == "Charlie")
+```
+
+# Charlie
+```{r plots, include = FALSE}
+# ggplot(charlie, aes(x = Year, y = Count)) + geom_line()
+ggplot(charlie, aes(x = Year, y = Count, color = Gender)) + geom_line()
+```
+
+A line plot for the data shows an uptick in children, both male and female, being named "Charlie" in 1980, so analysis for the name will begin in 1980.
+```{r filter data}
+charlie_1980 <- charlie %>% 
+  filter(Year >= 1980)
+```
+
+# Without accounting for gender
+There is a general upward trend in children being named Charlie between 1980 and present day. Based on the line plot, a more parabolic model could be more appropriate because of the increasing rate of more children being named Charlie. Based on the linear model, approximately 1.156 children are named Charlie every 10 years.
+```{r model}
+model <- lm(Year ~ Count, charlie_1980)
+
+summary(model)
+
+ggplot(charlie_1980, aes(x = Year, y = Count)) +
+  geom_point() + 
+  stat_smooth(method = "lm")
+```
+```{r residuals, include = FALSE}
+library(modelr)
+
+charlie_1980 <- charlie_1980 %>%
+  add_predictions(model) %>%
+  mutate(residual = Count - pred)
+
+ggplot(charlie_1980, aes(x = Year, y = residual)) + geom_point()
+```
+# With gender accounted for
+```{r model by gender}
+model_2 <- lm(Count ~ Year*Gender, data = charlie_1980)
+
+summary(model_2)
+
+ggplot(charlie_1980, aes(x = Year, y = Count, color = Gender)) + geom_point() + stat_smooth(method = "lm")
+```
+
+With gender accounted for, we can see that more males are being named Charlie, in general, over females based on the additional 360.39 added to the intercept for males. Despite, the rate of increase is higher for females than it is for males, as shown by the slope adjustment for Male (-0.1426); this means that there is an increasing rate of females being named Charlie over males.
+```{r residuals by gender}
+charlie_1980 <- charlie_1980 %>% add_predictions(model_2) %>% 
+  mutate(residual = Count - pred)
+
+ggplot(charlie_1980, aes(x = Year, y = residual, color = Gender)) + geom_point()
+```
+
+The residuals mostly appear to be randomly spread out. There is a slight parabolic trend to residuals, but in regards to constant variance, it doesn't appear fan-shaped out so it  shouldn't be an issue.

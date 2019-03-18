@@ -1,0 +1,62 @@
+---
+title: 'In-Class Activity: mtcars bootstrap'
+author: "Luisa Simpao"
+date: "March 5, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Activity
+
+## Automatic versus manual cars
+
+Load the `mtcars` dataset into R by typing `data(mtcars)`.
+
+This dataset contains information about 32 different cars.
+
+Use bootstrapping to make a 95\% confidence interval for the difference in horsepower (`hp`) between automatic (`am = 0`) and manual (`am = 1`) cars.
+
+Write a sentence summarizing your findings in the PolyLearn assignment.
+
+```{r load in}
+data(mtcars)
+
+library(tidyverse)
+library(modelr)
+library(broom)
+```
+
+```{r bootstrap}
+
+mtcars_am <- mtcars %>% 
+  select(hp, am) %>% 
+  filter(am == 1) %>% 
+  pull(hp)
+
+mtcars_ma <- mtcars %>% 
+  select(hp, am) %>% 
+  filter(am == 0) %>% 
+  pull(hp)
+  
+sample(mtcars_am, replace = TRUE)
+sample(mtcars_ma, replace = TRUE)
+
+am_boot <- replicate(1000, sample(mtcars_am, replace = TRUE), simplify = FALSE)
+ma_boot <- replicate(1000, sample(mtcars_ma, replace = TRUE), simplify = FALSE)
+
+car_stat <- data.frame(
+  auto = map_dbl(am_boot, mean),
+  manual = map_dbl(ma_boot, mean)
+) %>% 
+  mutate(diff = auto - manual)
+
+head(car_stat)
+
+car_stat %>% 
+ggplot(aes(x = diff)) + geom_histogram(bins = 20)
+
+quantile(car_stat$diff, c(0.025, 0.975))
+```

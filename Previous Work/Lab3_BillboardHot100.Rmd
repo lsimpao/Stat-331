@@ -1,0 +1,105 @@
+---
+title: 'Lab 3: Billboard Hot 100'
+author: "Luisa Simpao"
+date: "1/31/2019"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+library(lubridate)
+songs <- read.table("https://www.dropbox.com/s/jrwjthqo9b5o07g/billboard_songs.txt?dl=1", header = TRUE, stringsAsFactors = FALSE)
+```
+0. Make variables easier to work with.
+```{R}
+songs <- songs %>%
+  mutate(chart.date = ymd(chart.date)) %>% 
+  separate(artist, into = c("artist", "featured"), sep = " featuring | ft | feat")
+```
+
+1. "Radioactive" by Imagine Dragons spend the most time on the charts at 85 weeks. Followed by "I'm Yours" by Jason Mraz and "How Do I Live" by LeAnn Rimes. The rest of the list can be found by calling the code below.
+```{R}
+songs %>%
+  select(title, artist, weeks.on.chart) %>%
+  arrange(desc(weeks.on.chart)) %>%
+  top_n(10, weeks.on.chart)
+```
+
+2. The oldest songs on the chart left the Billboard Hot 100 on July 27, 1940. 
+```{R}
+songs %>%
+  mutate(off.date = chart.date + weeks(weeks.on.chart)) %>%
+  arrange(chart.date) %>%
+  select(chart.date, off.date) %>%
+  head(1)
+```
+
+3. Songs that hit #1 within 2 months before and after my 16th birthday and could've played then were the "Harlem Shake" by Bauer, "Locked Out of Heaven" by Bruno Mars, and "One More Night" by Maroon 5.
+```{R}
+birthday <- mdy("June 11, 1997")
+birthday16 <- birthday + years(16)
+range <- interval(birthday16 - months(2), birthday16 + months(2))
+
+songs %>%
+  filter(overall.peak == 1, chart.date %within% range) %>% 
+  select(title, artist, chart.date)
+```
+
+4. Love, used 2724 times, is the most common 4+ letter word for Billboard charting song titles.
+```{R}
+titles <- songs %>% 
+  pull(title)
+
+four_char_words <- titles %>%
+  str_split(pattern = "[:space:]") %>% 
+  unlist(titles) %>%
+  str_extract_all("[:graph:]{4,}") %>% 
+  unlist(titles)
+  
+four_char_words %>%
+table() %>%
+sort() %>%
+rev() %>%
+head(1)
+```
+
+5. The Beatles, Mariah Carey, Elvis Presley, Madonna, and Michael Jackson are the artists (not including featured) with the most #1 hits.
+   Elvis Presley, Elton John, Madonna, Perry Como, and Kenny Chesney have the most weeks on the charts.
+```{R}
+songs %>% 
+  arrange(artist) %>%
+  filter(overall.peak == 1) %>%
+  count(artist) %>%
+  arrange(desc(n)) %>%
+  top_n(5, n) 
+
+songs %>% 
+  group_by(artist) %>% 
+  summarize_at(vars(weeks.on.chart),
+               funs(sum)) %>%
+  arrange(desc(weeks.on.chart)) %>%
+  top_n(5, weeks.on.chart)
+```
+
+6. Lil Wayne is the most featured artist for Billboard songs. His Orchestra appears to be the "artist" that has had the most collaborations; while this is the result that comes out, his orchestra appears to accompany many artists, and thus may not be the correct answer for this section.
+```{R}
+songs %>%
+  arrange(featured) %>%
+  na.omit() %>%
+  count(featured) %>%
+  arrange(desc(n))
+
+collab <- songs %>% 
+  pull(artist)
+
+collab_artists <- collab %>%
+  str_subset(pattern = ", | & ") %>%
+  str_split(pattern = ", | & ") %>% 
+  unlist(collab)
+  
+collab_artists %>%
+table() %>%
+sort() %>%
+rev() %>%
+head(1)
+```

@@ -1,0 +1,111 @@
+---
+title: "Lab 4: Pokemon"
+author: "Luisa Simpao"
+date: "February 12, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(fig.width = 10, fig.height = 4, echo = TRUE)
+```
+
+```{r load data, echo = FALSE}
+library(tidyverse)
+library(dplyr)
+pokes <- read.csv("https://www.dropbox.com/s/i0lwxgv86eaoq4o/pokemon.csv?dl=1")
+```
+
+```{r data intro & prep, echo = FALSE}
+pokes <- pokes %>% 
+  mutate(
+    Catch_Difficulty = case_when(
+      Catch_Rate > 170 ~ "Easy",
+      between(Catch_Rate, 85, 170) ~ "Medium", 
+      Catch_Rate < 85 ~ "Hard"
+    ),
+    Catch_Difficulty = factor(Catch_Difficulty, levels = c("Easy", "Medium", "Hard"))
+  ) 
+```
+A Catch_Difficulty factor was made from Catch_Rate so that we may see if there are differences in total power between these groups.
+
+# Visual Analysis
+```{r all pokemon plot, fig.width = 10, fig.height = 4, include = FALSE}
+pokes %>% 
+  group_by(Type_1) %>% 
+  summarize(avg_Total = mean(Total)) %>% 
+  mutate(
+    Type_1 = fct_reorder(Type_1, avg_Total)
+  ) %>%
+  ggplot(aes(x = Type_1, y = avg_Total, fill = Type_1)) +
+  geom_col() + 
+  guides(fill = FALSE) +
+  xlab("Pokemon Main Type") + 
+  ylab("Total Power") + 
+  theme(axis.text.x = element_text(size = 8, angle = 45), axis.ticks = element_blank())
+```
+
+Among all the Pokemon listed, Dragon types appear to be the strongest Pokemon and Bug types are the weakest.
+```{r pokemon plot by group, fig.height = 6}
+pokes %>% 
+  group_by(Catch_Difficulty, Type_1) %>% 
+  summarize(avg_Total = mean(Total)) %>% 
+  mutate(
+    Type_1 = fct_reorder(Type_1, avg_Total)
+  ) %>%
+  ggplot(aes(x = Type_1, y = avg_Total, fill = Type_1)) +
+  geom_col() +
+  facet_wrap(~Catch_Difficulty) + 
+  xlab("Pokemon Main Type") + 
+  ylab("Total Power") + 
+  theme(legend.position = "top",
+        axis.text.x = element_blank(), 
+        axis.ticks = element_blank())
+```
+
+The trend of Dragon types being the strongest and Bug types being the weakest is generally still true for the Pokemon that are easy to catch; the plot shows that Flying types are actually the weakest in this Catch Difficutly Group.
+However, there are differences for those that have moderate and high levels of difficulty to catch! 
+For medium catch difficulty Pokemon, Fire Type is the strongest and the Bug Type is the weakest.
+For high catch difficulty, we can see why Flying Type was not the generally weakest Pokemon! These are the strongest in this group, while Bug Type remains the weakest.
+
+```{r plot of catch rate x total power, include = FALSE}
+pokes %>% 
+  ggplot(aes(x = Catch_Rate, 
+             y = Total, 
+             color = Catch_Difficulty)) + 
+  geom_point() +
+  xlab("Catch Rate") + 
+  ylab("Total Power")
+
+# This plot was made to see the general spread of the data. Pokemon that are hard to catch appear to have more power in general, while it is the opposite for those who are easier to catch. However, there is a wide spread of total strength for the Pokemon, as there are still a few of the hard to catch Pokemon that are weaker than the majority of those who at easy or medium levels of cagtch difficulty.
+```
+
+# Stastical Analysis
+```{r chi-square test, warning = FALSE}
+pk_types <- pokes %>% 
+  group_by(Catch_Difficulty, Type_1) %>% 
+  summarize_at(vars(Total), funs(mean)) %>% 
+  spread(key = Catch_Difficulty, value = Total) %>% 
+  filter(Type_1 != "Dragon" & Type_1 != "Flying") # Dragon & Flying type had null values
+pk_types %>% 
+  select(-Type_1) %>% 
+  chisq.test()
+```
+I wanted to see if there are differences in the average total power for each Pokemon type between the different catch difficulty groups. From this chi-square analysis, at the 0.10 rate, we can conclude that there is a significant difference in average total strength between the different catch difficulty groups.
+```{r t-tests, include = FALSE}
+em <- pk_types %>% 
+  select(Type_1, Easy:Medium) %>% 
+  gather(key = Catch_Difficulty, value = Total, -Type_1)
+t.test(Total ~ Catch_Difficulty, data = em, conf.level = 0.90)
+
+eh <- pk_types %>% 
+  select(Type_1, Easy, Hard) %>% 
+  gather(key = Catch_Difficulty, value = Total, -Type_1)
+t.test(Total ~ Catch_Difficulty, data = eh, conf.level = 0.90)
+
+mh <- pk_types %>% 
+  select(Type_1, Medium:Hard) %>% 
+  gather(key = Catch_Difficulty, value = Total, -Type_1)
+t.test(Total ~ Catch_Difficulty, data = mh, conf.level = 0.90)
+
+# I performed t-tests to see if there were significant differences in average Total Power between the different Catch Difficulty groups. Based on the generated p-values for the 3 tests, there appear to be significant differences in all 3 comparisons. Based on the generated p-values, the biggest differences appear to be between Easy & Hard, followed by Medium & Hard. Easy & Medium appear to have the least amount of differences.
+```

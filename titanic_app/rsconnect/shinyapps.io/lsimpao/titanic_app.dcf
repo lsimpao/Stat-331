@@ -1,0 +1,12 @@
+name: titanic_app
+title: titanic_app
+username:
+account: lsimpao
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 751264
+bundleId: 1907811
+url: https://lsimpao.shinyapps.io/titanic_app/
+when: 1551397797.17377
+asMultiple: FALSE
+asStatic: FALSE

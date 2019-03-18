@@ -1,0 +1,29 @@
+---
+title: "lecture feb21"
+author: "Luisa Simpao"
+date: "February 21, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# echo <- Should this code be shown?
+# eval <- Should this code be run?
+# include <- Should this code be neither shown nor run?
+# error <- If there is an error, shout it display, rather than break knit?
+# warning <- show warnings?
+# message <- 
+# see slide 35/36 for all the options!!
+```
+
+# This makes a header wow
+```{r this is my code chunk name wow}
+library(readr)
+library(readxl)
+
+ages_csv <- read.csv("Age_Datasets/ages.csv", stringsAsFactors = FALSE)
+# read.csv reads strings as factors by default so have to declare OR use read_csv!
+ages_tab <- read_delim("Age_Datasets/ages_tab.txt", " ", col_types = "fc")
+ages_mys <- read_delim("Age_Datasets/ages_mystery.txt", "|", trim_ws = TRUE)
+ages_xcl <- read_excel("Age_Datasets/ages.xlsx")
+```

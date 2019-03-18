@@ -1,0 +1,77 @@
+---
+title: "Lab2_Avocado"
+author: "Luisa Simpao"
+date: "1/24/2019"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+avo <- read.csv("https://www.dropbox.com/s/vsc1dkosz6nwake/avocado.csv?dl=1")
+```
+
+(1) The Northeast region sold the most bags of small organic avocados in 2017.
+```{r}
+avo %>%
+  filter(region != "TotalUS", type == "organic", year == 2017) %>%
+  top_n(1, Small.Bags)
+```
+
+(2) January 2018 has the highest average volume of avocado sales.
+```{r}
+avo %>%
+  separate(Date, into = c("yr","month","day"), sep = "-") %>%
+  top_n(1, Total.Volume)
+```
+
+(3) California, the Northeast, South Central, Southeast, and Southwest regions sell the most avocados.
+```{r}
+top_5 <- avo %>% 
+  filter(region != "TotalUS") %>%
+  group_by(region) %>%
+  summarize_at(
+    vars(Total.Volume),
+    funs(mean)
+  ) %>%
+  top_n(5, Total.Volume)
+top_5 <- pull(top_5, var = 1)
+avo %>%
+  filter(region == top_5) %>%
+  ggplot(aes(x = region, y = Total.Volume)) + 
+  geom_boxplot()
+```
+
+(4) San Francisco has the largest difference in average price of organic versus conventional avocados.
+```{r}
+ca_avo <- avo %>% 
+  filter(region == "LosAngeles" | region == "SanDiego" | region == "Sacramento" | region == "SanFrancisco" )
+ca_avo %>%
+  group_by(type, region) %>%
+  summarize(avg_price = mean(AveragePrice)) %>% 
+  spread(key = type, value = avg_price) %>%
+  mutate(
+    diff = organic - conventional
+  ) %>%
+  arrange(desc(diff))
+ca_avo %>% 
+  ggplot(aes(x = region, y = AveragePrice, fill = type)) + 
+  geom_col(position = "dodge") + 
+  ggtitle("Difference in Avocado Prices")
+```
+
+(5) The majority of people in Califonia buy small bags when they shop for avocados. In Los Angeles and San Diego, for both conventional and organic avocados, a bigger portion of people buy large bags. XLarge bags appear to only be bought in significant amounts in Los Angeles, Sacramento, and San Diego for conventional -- not organic -- avocados.
+```{r}
+ca_avo %>% 
+  group_by(region, type) %>%
+  mutate(
+    small_pct = Small.Bags/Total.Bags,
+    large_pct = Large.Bags/Total.Bags,
+    xl_pct = XLarge.Bags/Total.Bags
+  ) %>%
+  summarize_at(vars(small_pct,large_pct,xl_pct), funs(mean), na.rm = TRUE) %>%
+  gather(small_pct, large_pct, xl_pct, key = "sale_size", value = pct_sales) %>%
+  ggplot(aes(x = region, y = pct_sales, fill = sale_size)) + 
+  geom_col() + 
+  facet_wrap(~ type)
+```

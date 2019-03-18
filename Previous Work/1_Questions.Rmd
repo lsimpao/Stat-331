@@ -1,0 +1,128 @@
+---
+title: "Questions for Class Activity 1"
+author: "Luisa Simpao"
+date: "January 7, 2019"
+output: html_document
+---
+
+1a) How many students have filled out the survey so far?
+
+```
+
+87
+
+```
+
+1b) What possible issues do you see with the way your survey data was stored in the dataset `survey_orig`?
+
+```
+
+Some variables, for example # of computer classes, is read as a character variable instead of a numeric variable.
+Categorical variables, i.e. previous R/GitHub usage, political party, hotdog opinions, Kardashians, are also read as character variables, while not necessarily as factors.
+
+```
+
+2a) Why do you think we might have taken made a new dataset, `free_response`?
+
+```
+
+The variables included in free_response, in general, have a greater character length and responses cannot typically fit within categories.
+It won't be helpful in gaining generalizations about the students in the classes because of how widely spread out these responses are.
+
+```
+
+2b) Explain in words what is different about the dataset `survey` as compared to `survey_orig`.
+
+```
+
+The three options of past R-usage are each a different variable. What people selected -- or didn't select -- is marked TRUE if select and FALSE if not.
+The Excited and Nervous columns are also excluded from this new dataset.
+
+```
+
+### Questions:
+
+3a) What did you learn about majors and minors of 331 students?
+
+```
+
+Most people who are not CS or Stats majors in the class are pursuing a Stats minor. All of those who are listed as "Other" majors are pursuing stats minors, as are the majority of those who are Business and Econ majors in the class.
+Data science is also a commonly pursued minor, most coming from CS, Math, and Stats.
+Still, there are people in the class who are not pursuing a stats minor but are in the class and there are others pursuing different minors.
+
+```
+
+
+3b) What did you learn about Kardashian preference and school year?
+
+```
+
+Freshmen in the class are clearly divided between the youngest Kardashians, Kendall and Kylie.
+However, as students get older, most tend to just not care about the Kardashians more and more.
+For those who do care, Kanye is the favorite. Kendall tends to be second for sophomores to seniors, but grad students like Kim second.
+
+```
+
+
+3c) What did you learn about the relationship between hot dog definitions, political preference, and major?
+
+```
+
+Hot dogs are neither sandwiches nor tacos and most democrats (across the 3 major categories), those from other political parties (other and stats major), and Republicans (NOT CS or Stats) agree.
+Portions of all majors across Democrat and Other party preferences wrongly think that hotdogs are sandwiches, but 100% of Republican and Stats major wrongly think so too.
+Tacos, thankfully, make up the smallest portions of hot dog definitions across all parties, but there are still Other and Stats students, who are Democrats and Other party that think this and there are Other major Republican students who think this. 
+It's funny to see that only Other party CS majors chose NA.
+
+
+```
+
+
+### Questions:
+
+4a) Use your console to look at `survey_courses_1` and `survey_courses_2`.  Explain the difference between these.
+
+
+```
+
+survey_courses_1 includes only the variables Major, Minor, Year, Stat.Classes, and CS.Classes.
+survey_courses_2 includes all variables. However, rather than separating the counts for Stats and CS, there is a Column naming either Stats or CS and a column with the number of classes taken for each subject. Thus, each dataline -- each student -- has a second dataline, one for stats and one for CS.
+
+```
+
+
+4b) Why might we want two different styles of data?
+
+
+```
+
+Separating the 2 types of classes might make it easier to do calculations or summaries for only CS or for only Stats.
+However, categorizing them might make it easier to subset data with functions (i.e. > 10).
+
+```
+
+4c) What did you learn about coursework and majors?
+
+
+```
+
+In this class, CS majors have taken significantly more CS classes than other students, in general. On average, CS majors in the class have taken an average of about 10 CS classes, while others average mostly between 0 and 2.5.
+Stats majors have also taken more stats classes than students from other majors - most stats majors have taken 5 or more classes, while those from other majors have taken an average of 4 or less.
+
+```
+
+5a) What did you observe about the opinions of Cal Poly students over their course of study?
+
+```
+
+Cal Poly students care less and less about the Kardashians as they advance in their studies.
+
+
+```
+
+5b) What fun things did you notice in the word clouds?
+
+```
+
+tidytext package was not running.
+
+```

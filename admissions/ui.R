@@ -14,8 +14,22 @@ names(admitdec) <- c("serial","gre","toefl","univ_rate","state_purp","letter_rec
 fluidPage(
   titlePanel("Admissions Prediction"),
   fluidRow(
-    column(3,
-           wellPanel(
+    sidebarLayout(
+      sidebarPanel(
+        h4("Compare Scores"),
+        selectInput(inputId = "xvar", 
+                    label = "X-axis variable", 
+                    choices = c("GRE Score" = "gre",  
+                                "TOEFL Score" = "toefl", 
+                                "Undergraduate GPA" =  "ug_gpa"),
+                    selected = "gre"),
+        selectInput(inputId = "yvar", 
+                    label = "Y-axis variable", 
+                    choices = c("GRE Score" = "gre", 
+                                "TOEFL Score" = "toefl", 
+                                "Undergraduate GPA" =  "ug_gpa"), 
+                    selected = "toefl"),
+        hr(),
              h4("Filter"),
              sliderInput("gre", "Minimum GRE Score",
                          290, 340, 290, step = 5),
@@ -27,24 +41,10 @@ fluidPage(
                          step = 0.5),
              sliderInput("letter_rec", "Letter of Recommendation Rating",
                          1, 5, c(1, 5), step = 0.5)
-           ),
-           wellPanel(
-             selectInput(inputId = "xvar", 
-                         label = "X-axis variable", 
-                         choices = c("GRE Score" = "gre",  
-                                     "TOEFL Score" = "toefl", 
-                                     "Undergraduate GPA" =  "ug_gpa"),
-                         selected = "gre"),
-             selectInput(inputId = "yvar", 
-                         label = "Y-axis variable", 
-                         choices = c("GRE Score" = "gre", 
-                                     "TOEFL Score" = "toefl", 
-                                     "Undergraduate GPA" =  "ug_gpa"), 
-                         selected = "toefl")
-           )
-    ),
-    column(9,
-           ggvisOutput(plot_id = "plot1")
+        ),
+      mainPanel(
+        ggvisOutput(plot_id = "plot1")
+        )
+      )
     )
   )
-)

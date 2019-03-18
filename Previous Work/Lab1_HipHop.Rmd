@@ -1,0 +1,168 @@
+---
+title: 'Lab 1: HipHop Lyrics'
+author: "Luisa Simpao"
+date: "1/17/2019"
+output: html_document
+---
+
+```{r}
+hiphop <- hiphop <- read.csv("https://www.dropbox.com/s/1qqyshx5ikt9zoc/hiphop.csv?dl=1")
+library(tidyverse)
+head(hiphop)
+str(hiphop)
+```
+
+Introduction
+
+  1. Using code from Chunk 1, there are 38 variables in this data set, encompassing the different types of variables in R.
+  Factors: word (64 levels), subj (168 levels), sex (2 levels), ethnic (9 levels)
+  Numeric variables: city, county, bieber, asianMove, blackMove, hispanicMove, nativeMove, SAAMEMove, whiteMove, blackWeekly
+  Integer variables: age, intl, vocal, classical, folk, rock, country, pop, alternative, hiphop, unclassifiable, countyBlack, jayz, barkley, boondocks, monique, jayz1, boondocks1, familiarity1, trial , fam1. popularityScore, numPreferredArtists, numOverallArtists
+  
+```{r}
+unique(hiphop$word)
+```
+  2. Based on Chunk 2 (below), 64 unique AAVE words were studied in this data set. 
+  
+  3. See Chunk 3 below.
+```{r}
+summary(hiphop$ethnic)
+
+hiphop2 <- hiphop %>%
+  mutate(
+    ethnic = case_when
+                   (ethnic == "white" ~ "white",
+                    ethnic != "white" ~ "non-white")
+                    )
+```
+
+  4. Demographics
+  More women (7,488) participated in this study than men (3,264). 
+  Age-wise, this study skews younger; the minimum age is 16, median age is 19, and maximum is 48 years old.
+  More white people (8,640) participated in this study than non-white people (2,112).
+```{r}
+  summary(hiphop2$sex)
+  summary(hiphop2$age)
+  summary(hiphop$ethnic)
+  hiphop2 %>%
+    count(ethnic)
+```
+  5. Most people who participated in this study are around 20 years old. There is a wider spread in age for women than men, but the median age for women is lower. The largest group for the people who participated in this study are white women; this group size is followed by those for white men, non-white women, and finally, non-white men.
+```{r}
+by_age <- hiphop2 %>%
+          arrange(age)
+age_plot <- ggplot(by_age, aes(x = age)) + 
+            geom_histogram(binwidth = 5) + ggtitle("Distribution of Age")
+age_sex_plot <- ggplot(by_age, aes(x = sex, y = age)) + 
+            geom_boxplot() + ggtitle("Distribution of Age by Sex")
+sex_eth_plot <- ggplot(hiphop2, aes(x = ethnic, fill = sex)) + 
+                geom_bar() +
+                ggtitle("Distribution of Gender by Ethnicity") + 
+                xlab("ethnicity")
+age_plot
+age_sex_plot
+sex_eth_plot
+```
+
+Familiar Words
+
+1. See Chunk 6, below:
+```{r}
+# a - Most familiar: "off the hook" // Least familiar: "catch the vapors"
+young_max <- hiphop2 %>%
+  filter(age < 20) %>%
+  group_by(word) %>%
+  summarize_at(vars(familiarity), funs(mean)) %>%
+  top_n(1, familiarity)
+young_min <- hiphop2 %>% 
+  filter(age < 20) %>%
+  group_by(word) %>%
+  summarize_at(vars(familiarity), funs(mean)) %>%
+  top_n(-1, familiarity)
+young_max
+young_min
+
+# b - Most familiar: "feel me" // Least familiar: a tie between "break someone out", "dupey", "plex", "rollie"
+woc_max <- hiphop2 %>%
+  filter(sex == "Female", ethnic != "white") %>%
+  group_by(word) %>%
+  summarize_at(vars(familiarity), funs(mean)) %>%
+  top_n(1, familiarity)
+woc_min <- hiphop2 %>%
+  filter(sex == "Female", ethnic != "white") %>%
+  group_by(word) %>%
+  summarize_at(vars(familiarity), funs(mean)) %>%
+  top_n(-1, familiarity)
+woc_max
+woc_min
+
+# c - Most familiar: "feel me" // Least familiar: "beezy", "break someone out", "catch the vapors", "crossroads", "dap", "domino", "face gator", "finna", "ghostride", "good hair" and 10 more words
+owm_max <- hiphop2 %>%
+  filter(age > 30, ethnic == "white") %>%
+  group_by(word) %>%
+  summarize_at(vars(familiarity), funs(mean)) %>%
+  top_n(1, familiarity)
+owm_min <- hiphop2 %>%
+  filter(age > 30, ethnic == "white") %>%
+  group_by(word) %>%
+  summarize_at(vars(familiarity), funs(mean)) %>%
+  top_n(-1, familiarity)
+owm_max
+owm_min
+```
+
+Use the data
+
+1. Aubrey (alternatively, Drake) should use words like "finna" and "5-0" -- these are words that are highly familiar with self-identified hiphop fans but not non-hiphop fans. Because words like "feel me", "hella", and "off the hook" are still highly familiar to non-hiphop fans, he should avoid using those words.
+```{r} 
+fan_familiar <- hiphop2 %>%
+  filter(hiphop >= 7) %>% 
+  group_by(word) %>%
+  summarize_at(vars(familiarity), funs(mean)) %>%
+  arrange(desc(familiarity))
+fan_familiar
+
+notfan_familiar <- hiphop2 %>%
+  filter(hiphop <= 2) %>% 
+  group_by(word) %>%
+  summarize_at(vars(familiarity), funs(mean)) %>%
+  arrange(desc(familiarity))
+notfan_familiar
+
+word_rank <- cbind(fan_familiar, notfan_familiar)
+word_rank
+```
+
+2. According to the generated sell_plot, Hella Bling might be more popular in more populated areas, because the word "hella" has is more familiar than the word than the word "boo" in large cities.
+```{r}
+wordsells <- hiphop2 %>%
+  mutate(city = case_when( 
+    city <= 60000 ~ "Small",
+    city > 60000 & city < 150000 ~ "Medium",
+    city >= 150000 ~ "Large"),
+    city_cat = factor(city, levels = c("Small", "Medium", "Large"))
+)
+wordsells %>%
+  filter(word == "hotline" | word == "boo" | word ==  "hella" | word == "bling") %>%
+  ggplot(aes(x = word, fill = factor(fam1))) + 
+  facet_wrap(~city_cat) +
+  geom_bar() + 
+  ggtitle("Familiarity by City Size for Two Words") + 
+  xlab("Word") +
+  ylab("Popularity Score") + 
+  scale_fill_discrete(name="Word Recognition",
+                    breaks=c("0", "1"),
+                    labels=c("Not Familiar", "Familiar"))
+```
+3. Using the given demographic conditions and ranking from most to least Justin Bieber song familiarity, it seems as if Subject 17 could be Justin Bieber! Subject 17 seems to not have too much knowledge about AAVE, with his top familiarity score being 5 for 11 words, but as those are the words that he is familiar with, a list of possible collaboration titles between Justin Bieber and Aubrey Graham can be found when you call the first 11 rows of its_jb.
+Based on the list of words, they could consider the following tracklist:
+1. A-town Peach 2. If I Ain't Got No Boo 3. Chedda Spenda (as in Spender lol) 4. Italian Duckets 5. Ya Feel Me? 6. Fake Hard 7. Hella Canada 8. Never Off the Hook 9. See Ya Player Hater 10. Toe'd Up By You 11. You Know What It Is
+```{r}
+its_jb <- hiphop2 %>%
+  filter(ethnic == "white", 
+         sex == "Male", 
+         age >= 17 & age <= 23, 
+         city >= 10000 & city <= 60000) %>% 
+  arrange(desc(bieber), desc(familiarity))
+its_jb[1:11,1]
+```

@@ -1,0 +1,329 @@
+---
+title: "STAT 331 Midterm"
+author: "Luisa Simpao"
+output: 
+  html_document: default
+---
+
+```{r, include = FALSE}
+
+knitr::opts_chunk$set(echo = TRUE)
+
+source("package_setup.R")
+
+nba <- read.csv("NBA_player_of_the_week.csv", header = TRUE, stringsAsFactors = FALSE)
+
+```
+
+## Part One:  Data Cleaning and Adjusting
+
+1. Fixing Height *(1 foot = 12 inches, 1 cm = 0.3937 inches)*
+
+a. Function 
+	
+```{r}
+### YOUR CODE HERE
+
+# here i first converted the height into a character string so that i may use the stringr capabilities. i split the column by the - to get the numbers so they can be used to calculat height in inches.
+
+#  nba$Height <- as.character(nba$Height)
+  
+#conv <- function(Height){
+  
+# if(str_detect(Height, "-")){ 
+#  nba <- nba %>% 
+#  separate(Height, into = c("feet","inch"), sep = "-")
+  
+#nba$feet <- as.integer(nba$feet)
+#nba$inch <- as.integer(nba$inch)
+
+#  nba %>%
+#  mutate(Height = (feet * 12) + inch)
+#  } else {
+#    str_remove(Height, pattern = "cm")
+#    nba$height <- as.integer(nba$Height)
+#    mutate(Height * 0.3937)
+#  }
+#}
+
+# HOW IT SHOULD BE
+
+fix_height <- function(h){
+  
+  if (str_detect(h, "-")) {
+    
+    fi <- unlist(str_split(h, "-"))
+    h <- as.numeric(fi[1])*12 + as.numeric(fi[2])
+    
+  }
+  
+  else if (str_detect(h, "cm")){
+    
+    h <- str_replace(h, "cm", "")
+    h <- as.numeric(h)*0.3937
+    
+  }
+  
+  return(h)
+  
+}
+
+```
+
+b. Update variable
+
+```{r}
+### YOUR CODE HERE
+
+#nba <- nba %>% 
+#  mutate(height = conv(Height))
+
+# HOW IT SHOULD BE
+nba <- nba %>% mutate(
+  Height = map_dbl(Height, fix_height)
+)
+```
+
+2. Fixing Weight *(1 kilogram = 2.20462 pounds)*
+
+```{r}
+### YOUR CODE HERE
+  
+#nba %>% 
+#  if(str_detect(Weight, "kg")){
+#    str_replace(Weight, "kg", replacement = "") %>%
+#    as.integer(Weight) %>%
+#      mutate(Weight == Weight * 2.20462)
+#  } else {
+#    as.integer(Weight)
+#  }
+
+## HOW IT SHOULD BE
+
+fix_weight <- function(ws){
+  
+  kgs <- str_detect(ws, "kg")
+  ws <- str_replace(ws, "kg", "")
+  ws <- as.numeric(ws)
+  ws[kgs] <- ws[kgs]*2.20462
+  
+  return(ws)
+}
+
+nba <- nba %>% mutate(
+  Weight = fix_weight(Weight)
+  
+)
+```
+
+
+## Part Two:  Data Analysis 
+Feel free to use the `nba2` dataset, which has the heights and weights already adjusted, for the remainder of the exam.
+
+```{r}
+
+nba2 <-read.csv("NBA_cleaned.csv", header = TRUE, stringsAsFactors = FALSE)
+
+```
+ 1. Fill in the blanks.
+ 
+```{r}
+### YOUR CODE HERE
+dim(nba2)
+
+length(unique(nba2$Position))
+# OR
+nba2 %>% distinct(Position) %>% count()
+
+# //
+
+# desired summary statistics for age & height
+nba2 %>% 
+  summarize_at(vars(Age), funs(min, max))
+nba2 %>% 
+  summarize_at(vars(Height), funs(mean))
+
+nba2 %>% 
+  group_by(Position) %>% 
+  count() %>% 
+  filter(Position == "SG")
+
+164/length(Position)
+
+nba2 %>% 
+  group_by(Team) %>% 
+  count() %>%
+  summarize(team_count = sum(n)) %>% 
+  top_n(1, team_count)
+nba2 %>% 
+  group_by(Team) %>% 
+  count() %>%
+  summarize(team_count = sum(n)) %>% 
+  top_n(-1, team_count)
+
+# OR
+
+nba2 %>% count(Team) %>% top_n(1,n) # or (-1,n)
+
+nba2 %>% 
+  summarize_at(vars(Weight), funs(median))
+
+nba2 %>% 
+  filter(Conference == "East") %>%
+  top_n(1, Weight) %>% 
+  select(Weight)
+```
+ 
+```
+This data set contains 1,145 rows containing information on 11 different positions.  Players' age ranged from 19 to 40, 32.8\% are from the SG position, and the overall average Height value (in inches) is 79.15 in.  The most common team is Los Angeles Lakers (71) while the least common teams were Brooklyn Nets and New Orleans Pelicans (5 each).  Although the overall median Weight (in pounds) was 225, the maximum Weight among East conference players was 325.  
+```
+
+2. Top 5 players: LeBron James, Kobe Bryant, Kevin Durant, and Michael Jordan are the top 4 NBA players, with a 3-way tie for the #5 spot among Allen Iverson, Karl Malone, and Tim Duncan.
+
+```{r}
+### YOUR CODE HERE
+nba2 %>% 
+  group_by(Player) %>% 
+  count() %>% # can combine first 2 lines as count(Player)
+  summarize(player_count = sum(n)) %>% # not needed
+  arrange(desc(player_count)) %>% # not needed but makes it easier to read
+  top_n(5, player_count)
+```
+
+3. Guards vs Forwards: At the 0.05 significance level, the p-value (<2.2e-16) provides strong evidence to show that guards, on average, do not tend to be taller than forwards.
+
+```{r}
+### YOUR CODE HERE
+nba3 <- nba2 %>% mutate(
+  Position2 = case_when(
+    str_detect(Position, pattern = "G") ~ "guard",
+    str_detect(Position, pattern = "F|C") ~ "forward"
+  )
+)
+
+t.test(Height ~ Position2, data = nba3, alternative = "greater")
+```
+
+```
+YOUR DISCUSSION HERE
+```
+
+4. Positions: Guards appear to be the most frequent position to have won Player of the Week. This position is followed by SG and Center.
+```{r}
+### YOUR CODE HERE
+nba3 %>% 
+  group_by(Position) %>% 
+  ggplot(aes(x = Position)) + geom_bar()
+```
+
+```
+YOUR DISCUSSION HERE
+```
+
+5. Superstars: The Phoenix Suns have the most players of the week who are not superstars.
+
+```{r}
+### YOUR CODE HERE
+nba2 %>% 
+  group_by(Team, Player) %>% 
+  count() %>%  # count(Player)
+  summarize(player_count = sum(n)) %>% # not needed
+  filter(player_count < 10) %>% # filter(n > 10) %> pull(Player)
+  group_by(Team) %>%
+  summarize(team_count = sum(player_count)) %>%  # count(Team)
+  top_n(1, team_count) # top_n(5)
+```
+
+6. Season Halves
+
+a. Halfway point: January 15, 2018
+    
+```{r}
+### YOUR CODE HERE
+nba2$Date <- mdy(nba2$Date)
+# use BELOW instead lol
+nba2 <- nba %>% mutate(Date = mdy(Date))
+
+nba78 <- nba2 %>% 
+  filter(Season == "2017-2018")
+# //
+start = min(nba78$Date)
+end = max(nba78$Date)
+interval(start,end) / 2
+# OR
+half <- nba78 %>% summarize(median(Date)) %>% pull()
+half
+```
+
+b. First half wins: Houston Rockets had the most first half wins.
+    
+```{r}
+### YOUR CODE HERE
+halfway <- make_date(year = 2018, month = 01, day = 15)
+nba78 %>% 
+  filter(Date < halfway) %>%
+  group_by(Team) %>% 
+  count() %>% # count(Team)
+  summarize(team_count = sum(n)) %>% # not needed
+  top_n(1, team_count)
+```
+
+c. Second vs first half: No teams had more wins in the second half.
+    
+```{r}
+### YOUR CODE HERE
+half1 <- nba78 %>% 
+  filter(Date < halfway) %>% 
+  group_by(Team) %>% 
+  count() %>% 
+  summarize(team_count = sum(n))
+
+half2 <- nba78 %>% 
+  filter(Date >= halfway) %>%
+  group_by(Team) %>% 
+  count() %>% 
+  summarize(team_count = sum(n))
+
+nba4 <- half1 %>%
+  left_join(half2, by = "Team")
+nba4 %>% 
+  mutate(diff = team_count.y - team_count.x) %>%
+  filter(diff > 0)
+
+# this is better lol
+nba78 %>% 
+  mutate(
+    season = case_when(
+      Date < ymd(half) ~ "First",
+      TRUE ~ "Second"
+    )
+  ) %>%
+  group_by(season, Team) %>%
+  summarize(nWins = n()) %>%
+  spread(key = season, value = nWins) %>%
+  mutate(
+    diff = Second - First
+  ) %>%
+  filter(diff > 0)
+```
+
+7. **EXTRA CREDIT** 
+
+```{r}
+all_star <-read.csv("nba_all_star.csv", header = TRUE, stringsAsFactors = FALSE)
+
+# added from solutions
+all_star <- all_star %>% mutate(
+  Date = dmy(Date),
+  Season.short = year(Date)
+)
+
+nba3 <- left_join(nba2, all_star, by = "Season.short")
+
+nba3 %>% 
+  filter(Date.x %within% interval(Date.y, Date.y + weeks(1))) %>%
+  filter(Player == MVP)
+
+### YOUR CODE HERE
+
+```

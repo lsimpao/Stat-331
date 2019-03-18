@@ -1,0 +1,172 @@
+---
+title: "In-Class Activity:  Dates and Times"
+author: "Luisa Simpao"
+date: "January 29, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## Setup
+
+We are now using a new package called `lubridate`.  To install it, copy the following into your console
+
+```
+install.packages("lubridate")
+```
+
+You only need to run this once, ever.
+
+Do NOT include this line in a code chunk - if you do, the package will be re-installed every single time you knit the file!
+
+Then run the following chunk to load up the packages.
+
+```{r, include = FALSE}
+
+library(tidyverse)
+library(lubridate)
+```
+
+
+## Warm-up exercises
+
+Answer the following using code (even if you know the answer already).
+
+1. Save your birthday as a Datetime object in R. 
+    My birthday is June 11, 1997.
+
+```{r}
+bday <- make_date(year = 1997, month = 06, day = 11)
+#bday <- mdy("June 11, 1997")
+```
+
+
+2. What day of the week does/did your birthday fall on in 2019?
+    A: Tuesday
+
+```{r}
+bday2 <- bday
+year(bday2) <- 2019
+wday(bday2, label = TRUE)
+```
+
+
+3. On what day of the week should you plan your 100th birthday party?
+    A: My 100th birthday party will fall on a Tuesday.
+
+```{r}
+wday(bday + years(100), label = TRUE)
+```
+
+
+4. Find the date that is exactly 9 months before your birthday.  If it falls on a holiday, think about the implications.
+  A: September 11 is 9 months before my birthday. It's not a holiday but it is a more somber time in American society.
+
+```{r}
+bday - months(9)
+```
+
+
+5. The following code loads a dataset giving the date ranges for the 12 Zodiac signs.  By making appropriate adjustments and calculations, find your Zodiac sign.
+    A: I'm a Gemini.
+
+```{r}
+zodiac <- read.csv("https://www.dropbox.com/s/s9ybzfcr0qvz6zy/zodiac.csv?dl=1")
+
+zodiac %>% 
+  separate(Dates, into = c("Start", "End"), sep = "-") %>%
+  mutate(
+    Start = parse_date_time(Start, orders = "md"),
+    End = parse_date_time(End, orders = "md")
+  ) %>%
+  filter(bday2 >= Start, bday2 <= End)
+
+# how to do the same thing above with lubridate
+zodiac %>% 
+  separate(Dates, into = c("Start", "End"), sep = "-") %>%
+  mutate(
+    Start = parse_date_time(Start, orders = "md"),
+    End = parse_date_time(End, orders = "md"),
+    Range = interval(Start, End)
+  ) %>%
+  filter(bday2 %within% Range)
+
+```
+
+
+## Solve the mystery
+
+Speaking of the Zodiac, one of the most famous mysteries in California history is the identity of the so-called "Zodiac Killer", who murdered 7 people in Northern California between 1968 and 1969.
+
+A new murder was committed last year in California, suspected to be the work of a new Zodiac Killer on the loose.  Fortunately, a camera was planted at the location where the body was found.The FBI has provided you with a list of people who entered the building last year, and what date and time they entered, in Pacific Standard Time (PST).
+
+
+```{r}
+suspects <- read.csv("https://www.dropbox.com/s/hkmfuyd3flnwuaa/suspect_times.csv?dl=1")
+
+```
+
+Unfortunately, the date and time of the murder is not known.  You have been hired to crack the case.  Use the clues below to discover the murderer's identity.
+
+
+1. Based on the sunburn patterns on the body, the murder was not committed in the morning.
+
+2. The room where the murder was committed is closed Tuesdays and Thursdays, so the murder did not happen on those days.
+
+3. It is believed that the murder was committed within 5 weeks (35 days) of Thanksgiving, 2018. 
+
+4. It was discovered that just before being murdered, the victim tried to send a text to her sister in Iceland, saying "Goodnight over there!"
+
+5. The Killer left behind a birthday card at the scene of the crime. The date is smudged, but the number of the month is shown to be 22.  It is thought that perhaps this murder took place less than two days after the Killer's birthday.
+
+6. The Killer him/herself is amused by our efforts, and he has sent us a cryptic clue:  "The number of minutes between Jan 1, 1970 at midnight and the time I arrived on the scene is divisible by 10."
+
+*Hint 1: Why did I chose that particular date and time for this question?*
+*Hint 2: Due to the strange phenomenon of leap seconds, your calculation may not return a whole number, even though it appears that way in the R printout.  Use `as.integer()` to convert a number to an integer.*
+
+```{r}
+# set up & filter for conditions 1 & 2
+suspects2 <- suspects %>%
+  mutate(
+    Time.Spotted = as.POSIXct(Time.Spotted, tz = "US/Pacific")
+  ) %>% 
+  arrange(Time.Spotted) %>%
+  mutate(Week.Day = wday(Time.Spotted, label = TRUE)
+  ) %>%
+  filter(Week.Day != "Tue" & Week.Day != "Thu" & hour(Time.Spotted) >= 12)
+
+# 3
+thanksgiving18 <- make_date(year = 2018, month = 11, day = 22)
+thanksgiving18 <- force_tz(thanksgiving18, tz = "US/Pacific")
+
+Range <- interval(thanksgiving18 - days(35), "2018-12-31")
+
+suspects3 <- suspects2 %>% 
+  filter(Time.Spotted %within% Range)
+
+# 4 
+suspects4 <- suspects3 %>% 
+  mutate(Time.Spotted.Ice = with_tz(Time.Spotted, tz = "Atlantic/Reykjavik")) %>%
+  filter(pm(Time.Spotted.Ice))
+
+# 5 
+suspects5 <- suspects4 %>%
+  filter(day(Time.Spotted) >= 20 & day(Time.Spotted) <= 24)
+
+# 6
+jan_test <- make_datetime(year = 2017, month = 01, day = 01, hour = 00, min = 00, sec = 00)
+jan_test <- force_tz(jan_test, tz = "US/Pacific")
+
+suspects6 <- suspects5 %>%
+  mutate(difference = difftime(Time.Spotted, jan_test, tz = "US/Pacific", units = "mins"))
+
+suspects6 %>% filter(as.integer(suspects6$difference) %% 10 == 0)
+```
+
+Who is the killer?  Submit your answer to PolyLearn.
+
+
+
+
+

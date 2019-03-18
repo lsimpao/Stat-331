@@ -1,0 +1,13 @@
+name: admissions
+title: admissions
+username:
+account: lsimpao
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 775501
+bundleId: 1941029
+url: https://lsimpao.shinyapps.io/admissions/
+when: 1552607137.86456
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: Admission_Predict.csv|Description.docx|ggvis admissions.zip

@@ -1,8 +1,0 @@
----
-title: "Installation"
-author: "Luisa Simpao"
-date: "February 12, 2019"
-output: html_document
----
-
-this is my test document!
